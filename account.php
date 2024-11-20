@@ -7,8 +7,12 @@
 
     include("connection.php");
 
+    
+
     $officerId = $_SESSION["id"];
     $officerUsername = $_SESSION["user"];
+
+    include("updateAccount.php");
 
     $sql = "SELECT * FROM Officer WHERE Officer_ID='$officerId'";
     $result = mysqli_query($conn, $sql);
@@ -22,6 +26,8 @@
     } else{
         echo "There was an error retrieving account information"; 
     }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +76,7 @@
         <main>
             <div class="container">
                 <h1>Manage Account</h1>
-                <form>
+                <form method="POST">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
                         <input type="text" class="form-control" id="username" name="username" require value="<?php echo $officerUsername?>">
@@ -83,12 +89,12 @@
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" id="name" name="name" value="<?php echo $officerName?>">
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="id" class="form-label">Officer ID</label>
                         <input type="text" class="form-control" id="id" name="id" value="<?php echo $officerId?>">
-                    </div>
+                    </div> -->
 
-                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                    <button type="submit" class="btn btn-dark" value="Update">UPDATE</button>
                 </form>
             </div>
         </main>
