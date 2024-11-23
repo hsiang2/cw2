@@ -15,9 +15,10 @@ $(function() {
     //     const modalId = $(this).data('bs-target');
     //     $(modalId).modal('show');
     // });
-
+   
 
     $(document).on('show.bs.modal', "#vehicleEditModal", function(event){
+        $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
         var id = button.data('id')
         var plate = button.data('plate')
@@ -34,25 +35,14 @@ $(function() {
         modal.find('.modal-body input[name="modelEdit"]').val(model);
         modal.find('.modal-body input[name="colourEdit"]').val(colour);
         modal.find('.modal-body select[name="ownerEdit"]').val(owner);
+
+        console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
     });
 
     // $('#vehicleEditModal').on('hidden.bs.modal', function () {
-    //     // const form = $(this).find('form');
-    //     // form[0].reset();  // Reset form inputs when modal is closed
 
-    //     // // Manually remove any lingering backdrop
-    //     // $('.modal-backdrop').remove();
-
-    //     // // Optionally, ensure modal is properly reset after closing
-    //     // $('body').removeClass('modal-open').css('padding-right', '');
-    //     // $('.modal').removeClass('in');
-    //     $(".modal-backdrop").remove();
-
-    //     // Reset the body's scrollbar state
-    //     $("body").removeClass("modal-open").css("padding-right", "");
-    
-    //     // Optionally reset the modal's content or state
-    //     $(this).find("form")[0].reset(); // Reset form fields
+    //     $(".modal-backdrop").remove(); // Remove lingering backdrops
+    //     $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
     // });
 
     $(document).on("submit", "#vehicleEditForm", function(event){
@@ -180,18 +170,29 @@ $(function() {
                     $("#alert").fadeIn();
                 }
                 $('#vehicleEditModal').modal('hide');
+                // $('.modal-backdrop').remove();
 
-                form[0].reset();
+                // form[0].reset();
+                // $(".modal-backdrop").remove(); // Remove lingering backdrops
+                // $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
             },
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                $('#vehicleEditModal').modal('hide');
+                // $('#vehicleEditModal').modal('hide');
             }
         });
         
     });
-
+    $('#vehicleEditModal').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+        console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
+    });
+    // $("#vehicleEditModal").on('hidden.bs.modal', function(){
+    //     //remove the backdrop
+    //     $('.modal-backdrop').remove();
+    //   })
     
     
 })
