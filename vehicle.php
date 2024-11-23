@@ -8,7 +8,7 @@
     include("connection.php");
     // include("addVehicle.php");
 
-    include("loadVehicle.php");
+    
 ?>
 
 <!DOCTYPE html>
@@ -56,10 +56,10 @@
             <div class="container" >
                 <h1>Search for Vehicles</h1>
                 <!-- Alert -->
-                <!-- <div id="alert" class="alert alert-light alert-dismissible fade show" role="alert">
+                <div id="alert" class="alert alert-light alert-dismissible fade show" style="display: none;" role="alert">
                     <p id="alertText"></p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div> -->
+                </div>
                 <!-- Search -->
                 <form method="POST">
                     <div class="mb-3">
@@ -69,91 +69,8 @@
                     <button type="submit" class="btn btn-outline-dark" value="Search">Search</button>
                 </form>
                 <a style="margin-top: 1rem;" class="btn btn-dark" data-bs-target="#addModal" data-bs-toggle="modal">ADD</a>
-                <?php
-                        // include("connection.php");
-                        // $targetPlate = $_POST["plate"] ?? '';
-
-                        // if ($targetPlate !== '') {
-                        //     $sql = "SELECT Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, Vehicle.Vehicle_make, Vehicle.Vehicle_model, Vehicle.Vehicle_colour, People.People_Name, People.People_Licence  
-                        //     FROM Vehicle LEFT JOIN Ownership ON Vehicle.Vehicle_ID = Ownership.Vehicle_ID LEFT JOIN People ON People.People_ID = Ownership.People_ID 
-                        //     WHERE Vehicle.Vehicle_plate='$targetPlate'";
-                        // } else {
-                        //     $sql = "SELECT Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, Vehicle.Vehicle_make, Vehicle.Vehicle_model, Vehicle.Vehicle_colour, People.People_name, People.People_licence  
-                        //     FROM Vehicle LEFT JOIN Ownership ON Vehicle.Vehicle_ID = Ownership.Vehicle_ID LEFT JOIN People ON People.People_ID = Ownership.People_ID";
-                        // }
-                       
-                        if($count > 0) {
-                            echo "
-                                <div class='table-responsive custom-table'>
-                                    <table class='table'>
-                                        <thead>
-                                            <tr>
-                                            <th scope='col' style='white-space: nowrap;'></th>
-                                            <th scope='col' style='white-space: nowrap;'>Plate Number</th>
-                                            <th scope='col' style='white-space: nowrap;'>Make</th>
-                                            <th scope='col' style='white-space: nowrap;'>Model</th>
-                                            <th scope='col' style='white-space: nowrap;'>Colour</th>
-                                            <th scope='col' style='white-space: nowrap;'>Owner Name</th>
-                                            <th scope='col' style='white-space: nowrap;'>Owner Licence</th>
-                                            <th scope='col' style='white-space: nowrap;'>Incidents</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>";
-
-                            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-
-                                $vehicleId = $row["Vehicle_ID"];
-                                $vehiclePlate = $row["Vehicle_plate"];
-                                $vehicleMake = $row["Vehicle_make"] ?? '-';
-                                $vehicleModel = $row["Vehicle_model"] ?? '-';
-                                $vehicleColour = $row["Vehicle_colour"] ?? '-';
-                                $peopleName = $row["People_name"] ?? '-';
-                                $peopleLicence = $row["People_licence"] ?? '-';
-
-                                $peopleID = $row["People_ID"];
-
-                                $sqlIncident = "SELECT Incident.Incident_ID, Incident.Incident_statement, People.People_name FROM Incident LEFT JOIN People ON Incident.People_ID = People.People_ID WHERE Incident.Vehicle_ID='$vehicleId'";
-                                $resultIncident = mysqli_query($conn, $sqlIncident);
-                                        
-                                echo "
-                                    <tr>
-                                        <th>
-                                            <a class='btn btn-light' data-bs-target='#editModal$vehicleId' data-bs-toggle='modal'>EDIT</a>
-                                        </th>
-                                        <th scope='row'>$vehiclePlate</th>
-                                        <td>$vehicleMake</td>
-                                        <td>$vehicleModel</td>
-                                        <td>$vehicleColour</td>
-                                        <td>$peopleName</td>
-                                        <td>$peopleLicence</td>
-                                        <td>
-                                    ";
-                                if (mysqli_num_rows($resultIncident)) {
-                                    while ($rowIncident = mysqli_fetch_assoc($resultIncident)) {
-                                        echo "
-                                                ID: {$rowIncident['Incident_ID']}</br>
-                                                Statement: {$rowIncident['Incident_statement']}</br>
-                                                People: {$rowIncident['People_name']}</br>
-                                        ";
-                                    }
-                                } else {
-                                    echo " - ";
-                                }   
-
-                                // Edit
-                                include("updateVehicle.php");
-
-                            }
-                            echo "
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                </table>
-                            </div>";
-                        } else{
-                            echo "Vehicle Not Found."; 
-                        }
-                ?>
+                <!-- Vehicle Table -->
+                <div id="vehicleList"></div>
             </div>
             <?php
                 include("addVehicle.php")
@@ -165,6 +82,9 @@
             </div>
         </footer>
         <!-- Bootstrap 5 JS via CDN -->
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> </script>
+        <script src="vehicle.js"></script>  
     </body>
 </html>
