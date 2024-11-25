@@ -10,12 +10,25 @@ $(function() {
             $("#alert").fadeIn();
         }
     });
+
+    $("#vehicleSearchForm").submit(function(event) {
+        event.preventDefault();  
     
-    // $(document).on('click', '.editBtn', function () {
-    //     const modalId = $(this).data('bs-target');
-    //     $(modalId).modal('show');
-    // });
-   
+        var formData = $(this).serializeArray();
+    
+        $.ajax({
+            url: 'vehicleLoad.php',  
+            type: 'POST',
+            data: formData,  
+            success: function(response) {
+                $('#vehicleList').html(response);  
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);  
+            }
+        });
+    });
+    
 
     $(document).on('show.bs.modal', "#vehicleEditModal", function(event){
         $('.modal-backdrop').remove();
@@ -36,7 +49,7 @@ $(function() {
         modal.find('.modal-body input[name="colourEdit"]').val(colour);
         modal.find('.modal-body select[name="ownerEdit"]').val(owner);
 
-        console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
+        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
     });
 
     // $('#vehicleEditModal').on('hidden.bs.modal', function () {
@@ -155,20 +168,13 @@ $(function() {
                             console.error('Error reloading data:', error);
                         }
                     });
-                    $('#alertText').text(response.message);
-                    $("#alert").fadeIn();
-
-                    
-
                     // $('.modal').modal('hide');
                     // form.closest('.modal').modal('hide');
                     // $('body').removeClass('modal-open');
                     // $('.modal-backdrop').remove();
-
-                } else {
-                    $('#alertText').text(response.message);
-                    $("#alert").fadeIn();
-                }
+                } 
+                $('#alertText').text(response.message);
+                $("#alert").fadeIn();
                 $('#vehicleEditModal').modal('hide');
                 // $('.modal-backdrop').remove();
 
@@ -179,20 +185,121 @@ $(function() {
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                // $('#vehicleEditModal').modal('hide');
+                $('#vehicleEditModal').modal('hide');
             }
         });
         
     });
+
     $('#vehicleEditModal').on('hidden.bs.modal', function () {
         $(".modal-backdrop").remove();
         $("body").removeClass("modal-open").css("padding-right", "");
-        console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
+        // console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
     });
-    // $("#vehicleEditModal").on('hidden.bs.modal', function(){
-    //     //remove the backdrop
-    //     $('.modal-backdrop').remove();
-    //   })
+
+
+    $(document).on('show.bs.modal', "#vehicleAddModal", function(event){
+        $('.modal-backdrop').remove();
+
+        var modal = $(this)
+        modal.find(".text-danger").hide();
+        modal.find('.modal-body input').val("");
+        modal.find('.modal-body select').val("");
+        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
+    });
     
+    // $(document).off("submit", "#vehicleAddForm").on("submit", "#vehicleAddForm", function(event){
+    $("#vehicleAddForm").off("submit").on("submit", function (event) {
+        event.preventDefault();
+        const form = $(this);
+        const plate = form.find("input[name='plate']").val().trim();
+        const make = form.find("input[name='make']").val().trim();
+        const model = form.find("input[name='model']").val().trim();
+        const colour = form.find("input[name='colour']").val().trim();
+        const owner = form.find("select[name='owner']").val() && form.find("select[name='owner']").val() !== ""
+            ? parseInt(form.find("select[name='owner']").val(), 10) 
+            : null;
+
+        let hasError = false;
+        
+        if (!plate) {
+            form.find("#plateError").show();
+            hasError = true;
+        }
     
+        if (!make) {
+            form.find("#makeError").show();
+            hasError = true;
+        } 
+    
+        if (!model) {
+            form.find("#modelError").show();
+            hasError = true;
+        }
+    
+        if (!colour) {
+            form.find("#colourError").show();
+            hasError = true;
+        } 
+    
+        if (hasError) {
+            return; 
+        }
+
+        const formData = {
+            plate,
+            make,
+            model,
+            colour,
+            owner
+        };
+
+        $.ajax({
+            url: "vehicleAdd.php",
+            type: "POST",
+            data: formData,
+            success: function (res){
+                //  console.log("Raw response:", res); // Log the raw response to inspect it
+                // try {
+                //     const response = JSON.parse(res); // Try parsing the response
+                //     console.log("Parsed response:", response); // Log the parsed response
+                // } catch (e) {
+                //     console.error("Failed to parse JSON:", e); // Catch and log any errors
+                // }
+                try {
+            
+                    const response = JSON.parse(res);
+                    if (response.success) {
+                        // $.ajax({
+                        //     url: 'vehicle.php',  
+                        //     type: 'GET',
+                        //     success: function(res) {
+                        //         $('#vehicleList').html(res);  
+                        //     },
+                        //     error: function(error) {
+                        //         console.error('Error reloading data:', error);
+                        //     }
+                        // });
+                        $('#vehicleList').load('vehicle.php');
+                    } 
+                    $('#alertText').text(response.message);
+                    $("#alert").fadeIn();
+                    $('#vehicleAddModal').modal('hide');
+                } catch (e) {
+                    console.error("Failed to parse JSON:", e, res); // Catch and log any errors
+                }
+            },
+            error: function(){
+                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
+                $("#alert").fadeIn();
+                $('#vehicleAddModal').modal('hide');
+            }
+        });
+    });
+    $('#vehicleAddModal').on('hidden.bs.modal', function () {
+        // $(this).find("form")[0].reset();
+
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+    });
 })

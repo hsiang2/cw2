@@ -61,19 +61,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <!-- Search -->
-                <form method="POST">
+                <form id="vehicleSearchForm" method="POST">
                     <div class="mb-3">
                         <label for="targetPlate" class="form-label">Plate Number</label>
                         <input type="text" class="form-control" name="targetPlate" id="targetPlate">
                     </div>
-                    <button type="submit" class="btn btn-outline-dark" value="Search">Search</button>
+                    <button type="submit" class="btn btn-outline-dark">Search</button>
                 </form>
-                <a style="margin-top: 1rem;" class="btn btn-dark" data-bs-target="#addModal" data-bs-toggle="modal">ADD</a>
+                <a style="margin-top: 1rem;" class="btn btn-dark" data-bs-target="#vehicleAddModal" data-bs-toggle="modal">ADD</a>
                 <!-- Vehicle Table -->
                 <div id="vehicleList"></div>
             </div>
             <?php
-                include("addVehicle.php")
+                include("vehicleAddForm.php")
             ?>
         </main>
         <footer class="footer">

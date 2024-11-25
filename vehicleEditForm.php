@@ -1,4 +1,4 @@
-<form method="POST" id="vehicleEditForm">
+<form id="vehicleEditForm">
     <div class="modal fade" tabindex="-1" id="vehicleEditModal">
         <div class="modal-dialog">
             <div class="modal-content">

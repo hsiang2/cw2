@@ -1,50 +1,5 @@
-<?php
-    // session_start();
-    // include('connection.php');
-       
-    if (isset($_POST['plate']) && $_POST['plate']!="" 
-    && isset($_POST['make']) && $_POST['make']!="" 
-    && isset($_POST['model']) && $_POST['model']!=""
-    && isset($_POST['colour']) && $_POST['colour']!=""
-    ) // check contents of $_POST supervariables
-    {     
-        // construct the INSERT query
-        $sqlAdd = "INSERT INTO Vehicle(Vehicle_plate, Vehicle_make, Vehicle_model, Vehicle_colour) VALUES ('" . $_POST['plate'] . "','" . $_POST['make'] ."','" . $_POST['model'] . "','" . $_POST['colour'] . "');";
-        // send query to the database
-        $resultAdd = mysqli_query($conn, $sqlAdd); 
-        $vehicleID = mysqli_insert_id($conn);
-
-        if($vehicleID) {
-            // $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            // $id = $row['Vehicle_ID'];
-
-            if (isset($_POST['owner']) && isset($_POST['owner']) != null) {
-
-                $sqlOwner = "INSERT INTO Ownership(Vehicle_ID, People_ID) VALUES ('" . $vehicleID . "','" . $_POST['owner'] . "');";
-                if ($conn->query($sqlOwner) === TRUE) {
-                    // echo "Vehicle added successfully";
-                    include("loadVehicle.php");
-                } else {
-                    // echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
-        } else{
-            // echo "There was an error adding vehicle"; 
-        }  
-        // }
-        // if ($conn->query($sql) === TRUE) {
-        //     echo "Vehicle added successfully";
-        // } else {
-        //     echo "Error: " . $sql . "<br>" . $conn->error;
-        // }
-
-       
-    }
-?>
-
-<!-- Add Form -->
-<form method="POST">
-    <div class="modal" tabindex="-1" id="addModal">
+<form id="vehicleAddForm">
+    <div class="modal fade" tabindex="-1" id="vehicleAddModal">
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
@@ -55,24 +10,28 @@
                 <div class="mb-3">
                     <label for="plate" class="form-label">Plate Number</label>
                     <input type="text" class="form-control" name="plate" id="plate">
+                    <span class="text-danger" id="plateError" style="display:none;">Please Enter Plate Number.</span>
                 </div>
                 <div class="mb-3">
                     <label for="make" class="form-label">Make</label>
                     <input type="text" class="form-control" name="make" id="make">
+                    <span class="text-danger" id="makeError" style="display:none;">Please Enter Make.</span>
                 </div>
                 <div class="mb-3">
                     <label for="model" class="form-label">Model</label>
                     <input type="text" class="form-control" name="model" id="model">
+                    <span class="text-danger" id="modelError" style="display:none;">Please Enter Model.</span>
                 </div>
                 <div class="mb-3">
                     <label for="colour" class="form-label">Colour</label>
                     <input type="text" class="form-control" name="colour" id="colour">
+                    <span class="text-danger" id="colourError" style="display:none;">Please Enter Colour.</span>
                 </div>
 
                 <div class="mb-3">
                     <label for="owner" class="form-label">Owner</label>
-                    <select class="form-select" name="owner">
-                        <option selected>Select Owner</option>
+                    <select class="form-select" name="owner" id="owner">
+                        <option selected value="">Select Owner</option>
                         <?php
                         
                             $sqlPeople = "SELECT People.People_ID, People.People_name, People.People_licence FROM People";
@@ -89,13 +48,11 @@
                         }
                         ?>
                     </select>
-                    <!-- <input type="text" class="form-control" name="plate" id="plate"> -->
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <!-- <input type="button" class="btn btn-primary">Save changes</button> -->
-                <button type="submit" class="btn btn-outline-dark" value="Save">SAVE</button>
+                <button type="submit" class="btn btn-outline-dark">SAVE</button>
             </div>
             </div>
         </div>
