@@ -29,12 +29,14 @@
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $id = $row["Officer_ID"];
+            $admin = $row["Officer_admin"];
         }
         mysqli_close($conn);
 
         if ($id != -1 && !isset($_SESSION["user"]) && !isset($_SESSION["id"])) {
             $_SESSION["user"] = $officerUsername;
             $_SESSION["id"] = $id;
+            $_SESSION["admin"] = $admin;
 
             header("Location: index.php"); 
             exit();
@@ -81,7 +83,7 @@
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" name="password" id="password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" value="Login">Submit</button>
+                    <button type="submit" class="btn btn-dark" value="Login">Submit</button>
                 </form>
                 <!-- <form method="POST">
                     Username: 

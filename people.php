@@ -4,6 +4,8 @@
         header("Location: login.php");
         exit();
     }
+
+    $disabled = ($_SESSION['admin']) ? "" : "disabled";
 ?>
 
 <!DOCTYPE html>
@@ -37,11 +39,11 @@
                             <a class="nav-link" href="/cw2/incident.php">INCIDENT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true" href="/cw2/officer.php">OFFICER</a>
+                            <a class="nav-link  <?php echo $disabled ?>" href="/cw2/officer.php">OFFICER</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="/cw2/account.php">Logged in as <b><?php echo $_SESSION['user']?></b></a></li>
                         <form method="POST" action="logout.php">
-                            <input type="submit" name="logout" value="Logout" />
+                            <input class="btn btn-outline-secondary" type="submit" name="logout" value="LOGOUT" />
                         </form>
 
                             <!-- <a class="nav-link" href="/login.php">LOGOUT</a> -->
@@ -53,15 +55,36 @@
             <div class="container" >
                 <h1>Search for People</h1>
                 <form method="POST">
-                    <div class="mb-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input  type="text" class="form-control" name="name" id="name" placeholder="Search for Name">
+                                <label for="licence">Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input  type="text" class="form-control" name="licence" id="licence" placeholder="Search for Licence Number">
+                                <label for="name">Licence Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <span>
+                                <button type="submit" class="btn btn-outline-dark">Search</button>
+                                <a class="btn btn-dark" data-bs-target="#peopleAddModal" data-bs-toggle="modal">ADD</a>
+                            </span>
+                            <!-- <button type="submit" class="btn btn-outline-dark" value="Search">Search</button> -->
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="text" class="form-control" name="name" id="name">
                     </div>
                     <div class="mb-3">
                         <label for="licence" class="form-label">Licence Number</label>
                         <input type="text" class="form-control" name="licence" id="licence">
-                    </div>
-                    <button type="submit" class="btn btn-outline-dark" value="Search">Search</button>
+                    </div> -->
+                    
                 </form>
                 <?php
                     // if(isset($_POST["name"]) || isset($_POST["licence"])) {
@@ -89,7 +112,6 @@
                                     <table class='table'>
                                         <thead>
                                             <tr>
-                                            <th scope='col' style='white-space: nowrap;'>ID</th>
                                             <th scope='col' style='white-space: nowrap;'>Name</th>
                                             <th scope='col' style='white-space: nowrap;'>Address</th>
                                             <th scope='col' style='white-space: nowrap;'>Date of Birth</th>
@@ -114,8 +136,7 @@
                                         
                                 echo "
                                     <tr>
-                                        <th scope='row'>$id</th>
-                                        <td>$name</td>
+                                        <th scope='row'>$name</td>
                                         <td>$address</td>
                                         <td>$dob</td>
                                         <td>$licence</td>
@@ -125,7 +146,6 @@
                                 if (mysqli_num_rows($resultFine)) {
                                     while ($rowFine = mysqli_fetch_assoc($resultFine)) {
                                         echo "
-                                                ID: {$rowFine['Fine_ID']}</br>
                                                 Points: {$rowFine['Fine_points']}</br>
                                                 Amount: {$rowFine['Fine_amount']}</br>
                                         ";

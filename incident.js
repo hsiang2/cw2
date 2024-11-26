@@ -1,8 +1,8 @@
 $(function() {
     $.ajax({
-        url: 'vehicleLoad.php',
+        url: 'incidentLoad.php',
         success: function (data) {
-            $('#vehicleList').html(data);
+            $('#incidentList').html(data);
 
         },
         error: function() {
@@ -11,63 +11,55 @@ $(function() {
         }
     });
 
-    $("#vehicleSearchForm").submit(function(event) {
+    $("#incidentSearchForm").submit(function(event) {
         event.preventDefault();  
     
         var formData = $(this).serializeArray();
     
         $.ajax({
-            url: 'vehicleLoad.php',  
+            url: 'incidentLoad.php',  
             type: 'POST',
             data: formData,  
             success: function(response) {
-                $('#vehicleList').html(response);  
+                $('#incidentList').html(response);  
             },
-            error: function(xhr, status, error) {
+            error: function(error) {
                 console.log("Error: " + error);  
             }
         });
     });
     
 
-    $(document).on('show.bs.modal', "#vehicleEditModal", function(event){
+    $(document).on('show.bs.modal', "#incidentEditModal", function(event){
         $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
+
         var id = button.data('id')
-        var plate = button.data('plate')
-        var make = button.data('make')
-        var model = button.data('model')
-        var colour = button.data('colour')
-        var owner = button.data('owner')
+        var time = button.data('time')
+        var statement = button.data('statement')
+        var vehicle = button.data('vehicle')
+        var people = button.data('people')
+        var offence = button.data('offence')
 
         var modal = $(this)
         modal.find(".text-danger").hide();
         modal.find('.modal-body input[name="idEdit"]').val(id);
-        modal.find('.modal-body input[name="plateEdit"]').val(plate);
-        modal.find('.modal-body input[name="makeEdit"]').val(make);
-        modal.find('.modal-body input[name="modelEdit"]').val(model);
-        modal.find('.modal-body input[name="colourEdit"]').val(colour);
-        modal.find('.modal-body select[name="ownerEdit"]').val(owner);
-
-        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
+        modal.find('.modal-body input[name="timeEdit"]').val(time);
+        modal.find('.modal-body input[name="statementEdit"]').val(statement);
+        modal.find('.modal-body input[name="vehicleEdit"]').val(vehicle);
+        modal.find('.modal-body input[name="peopleEdit"]').val(people);
+        modal.find('.modal-body select[name="offenceEdit"]').val(offence);
     });
 
-    // $('#vehicleEditModal').on('hidden.bs.modal', function () {
-
-    //     $(".modal-backdrop").remove(); // Remove lingering backdrops
-    //     $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
-    // });
-
-    $(document).on("submit", "#vehicleEditForm", function(event){
-    // $(document).on('submit', 'form[id^="vehicleEditForm"]', function(event){
+    $(document).on("submit", "#incidentEditForm", function(event){
         event.preventDefault();
         const form = $(this);
         const idEdit = parseInt(form.find("input[name='idEdit']").val(), 10);
-        const plateEdit = form.find("input[name='plateEdit']").val().trim();
-        const makeEdit = form.find("input[name='makeEdit']").val().trim();
-        const modelEdit = form.find("input[name='modelEdit']").val().trim();
-        const colourEdit = form.find("input[name='colourEdit']").val().trim();
-        const ownerEdit = form.find("select[name='ownerEdit']").val() 
+        const timeEdit = form.find("input[name='plateEdit']").val().trim();
+        const statementEdit = form.find("input[name='makeEdit']").val().trim();
+        const vehicleEdit = form.find("input[name='modelEdit']").val().trim();
+        const peopleEdit = form.find("input[name='colourEdit']").val().trim();
+        const offenceEdit = form.find("select[name='ownerEdit']").val() 
             ? parseInt(form.find("select[name='ownerEdit']").val(), 10) 
             : null;
     
@@ -109,72 +101,42 @@ $(function() {
 
         // var formData = $(this).serializeArray();
         $.ajax({
-            url: "vehicleEdit.php",
+            url: "incidentEdit.php",
             type: "POST",
             data: formData,
             success: function (res){
-                // console.log("Raw response:", res); // Log the raw response to inspect it
-                // try {
-                //     const response = JSON.parse(res); // Try parsing the response
-                //     console.log("Parsed response:", response); // Log the parsed response
-                // } catch (e) {
-                //     console.error("Failed to parse JSON:", e); // Catch and log any errors
-                // }
                 const response = JSON.parse(res);
                 if (response.success) {
-                    // $.ajax({
-                    //     url: 'vehicle.php',  
-                    //     type: 'GET',
-                    //     success: function(res) {
-                    //         $('#vehicleList').html(res);  
-                    //     },
-                    //     error: function(error) {
-                    //         console.error('Error reloading data:', error);
-                    //     }
-                    // });
-                    $('#vehicleList').load('vehicle.php');
-                    // $('.modal').modal('hide');
-                    // form.closest('.modal').modal('hide');
-                    // $('body').removeClass('modal-open');
-                    // $('.modal-backdrop').remove();
+                    $('#incidentList').load('incident.php');
                 } 
                 $('#alertText').text(response.message);
                 $("#alert").fadeIn();
-                $('#vehicleEditModal').modal('hide');
-                // $('.modal-backdrop').remove();
-
-                // form[0].reset();
-                // $(".modal-backdrop").remove(); // Remove lingering backdrops
-                // $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
+                $('#incidentEditModal').modal('hide');
             },
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                $('#vehicleEditModal').modal('hide');
+                $('#incidentEditModal').modal('hide');
             }
         });
         
     });
 
-    $('#vehicleEditModal').on('hidden.bs.modal', function () {
+    $('#incidentEditModal').on('hidden.bs.modal', function () {
         $(".modal-backdrop").remove();
         $("body").removeClass("modal-open").css("padding-right", "");
-        // console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
     });
 
-
-    $(document).on('show.bs.modal', "#vehicleAddModal", function(event){
+    $(document).on('show.bs.modal', "#incidentAddModal", function(event){
         $('.modal-backdrop').remove();
 
         var modal = $(this)
         modal.find(".text-danger").hide();
         modal.find('.modal-body input').val("");
         modal.find('.modal-body select').val("");
-        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
     });
     
-    // $(document).off("submit", "#vehicleAddForm").on("submit", "#vehicleAddForm", function(event){
-    $("#vehicleAddForm").off("submit").on("submit", function (event) {
+    $("#incidentAddForm").off("submit").on("submit", function (event) {
         event.preventDefault();
         const form = $(this);
         const plate = form.find("input[name='plate']").val().trim();
@@ -220,36 +182,18 @@ $(function() {
         };
 
         $.ajax({
-            url: "vehicleAdd.php",
+            url: "incidentAdd.php",
             type: "POST",
             data: formData,
             success: function (res){
-                //  console.log("Raw response:", res); // Log the raw response to inspect it
-                // try {
-                //     const response = JSON.parse(res); // Try parsing the response
-                //     console.log("Parsed response:", response); // Log the parsed response
-                // } catch (e) {
-                //     console.error("Failed to parse JSON:", e); // Catch and log any errors
-                // }
                 try {
-            
                     const response = JSON.parse(res);
                     if (response.success) {
-                        // $.ajax({
-                        //     url: 'vehicle.php',  
-                        //     type: 'GET',
-                        //     success: function(res) {
-                        //         $('#vehicleList').html(res);  
-                        //     },
-                        //     error: function(error) {
-                        //         console.error('Error reloading data:', error);
-                        //     }
-                        // });
-                        $('#vehicleList').load('vehicle.php');
+                        $('#incidentList').load('incident.php');
                     } 
                     $('#alertText').text(response.message);
                     $("#alert").fadeIn();
-                    $('#vehicleAddModal').modal('hide');
+                    $('#incidentAddModal').modal('hide');
                 } catch (e) {
                     console.error("Failed to parse JSON:", e, res); // Catch and log any errors
                 }
@@ -257,22 +201,79 @@ $(function() {
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                $('#vehicleAddModal').modal('hide');
+                $('#incidentAddModal').modal('hide');
             }
         });
     });
 
-    $('#vehicleAddModal').on('hidden.bs.modal', function () {
-        // $(this).find("form")[0].reset();
-
+    $('#incidentAddModal').on('hidden.bs.modal', function () {
         $(".modal-backdrop").remove();
         $("body").removeClass("modal-open").css("padding-right", "");
     });
 
-    $(document).on('click', "#vehicleDeleteBtn", function(event){
+    $("#fineAddForm").off("submit").on("submit", function (event) {
+        event.preventDefault();
+
+        var button = $(event.relatedTarget) 
+        var id = button.data('id')
+        console.log(id)
+
+        const form = $(this);
+        const amount = form.find("input[name='amount']").val().trim();
+        const points = form.find("input[name='points']").val().trim();
+
+        let hasError = false;
+        
+        if (!amount) {
+            form.find("#amountError").show();
+            hasError = true;
+        }
+    
+        if (!points) {
+            form.find("#pointsError").show();
+            hasError = true;
+        } 
+    
+        if (hasError) {
+            return; 
+        }
+
+        const formData = {
+            id,
+            amount,
+            points
+        };
+
+        $.ajax({
+            url: "fineAdd.php",
+            type: "POST",
+            data: formData,
+            success: function (res){
+                try {
+                    const response = JSON.parse(res);
+                    if (response.success) {
+                        $('#incidentList').load('incident.php');
+                    } 
+                    $('#alertText').text(response.message);
+                    $("#alert").fadeIn();
+                    $('#fineAddModal').modal('hide');
+                } catch (e) {
+                    console.error("Failed to parse JSON:", e, res); // Catch and log any errors
+                }
+            },
+            error: function(){
+                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
+                $("#alert").fadeIn();
+                $('#fineAddModal').modal('hide');
+            }
+        });
+    });
+
+
+    $(document).on('click', "#incidentDeleteBtn", function(event){
         var id = $(this).data('id')
         $.ajax({
-            url: "vehicleDelete.php",
+            url: "incidentDelete.php",
             type: "POST",
             data: {id},
             success: function (data){
@@ -280,16 +281,13 @@ $(function() {
                     $('#alertText').text("There was an issue delete the note from the database!");
                     $("#alert").fadeIn();
                 }else{
-                    //remove containing div
-                    // deleteButton.parent().remove();
-                    $('#vehicleList').load('vehicle.php');
+                    $('#incidentList').load('incident.php');
                 }
             },
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
             }
-
         });
         
     });

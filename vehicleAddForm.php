@@ -43,7 +43,8 @@
                             while($rowPeople = mysqli_fetch_array($resultPeople, MYSQLI_ASSOC)) {
                                 $peopleOptionID = $rowPeople["People_ID"];
                                 $peopleOptionName = $rowPeople["People_name"];
-                                echo "<option value=$peopleOptionID>$peopleOptionID $peopleOptionName</option>";
+                                $peopleOptionLicence = $rowPeople["People_licence"];
+                                echo "<option value=$peopleOptionID>$peopleOptionLicence $peopleOptionName</option>";
                             }
                         }
                         ?>

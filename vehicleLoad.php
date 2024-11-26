@@ -22,7 +22,7 @@ $count = mysqli_num_rows($result);
                 <table class='table'>
                     <thead>
                         <tr>
-                        <th scope='col' style='white-space: nowrap;'></th>
+                        <th scope='col' style='white-space: nowrap;'>Actions</th>
                         <th scope='col' style='white-space: nowrap;'>Plate Number</th>
                         <th scope='col' style='white-space: nowrap;'>Make</th>
                         <th scope='col' style='white-space: nowrap;'>Model</th>
@@ -52,7 +52,8 @@ $count = mysqli_num_rows($result);
             echo "
                 <tr>
                     <th>
-                        <a id='editBtn' class='btn btn-light' data-bs-target='#vehicleEditModal' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
+                        <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: 1rem'>DELETE</a>
+                        <a class='btn btn-outline-dark' data-bs-target='#vehicleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
                     </th>
                     <th scope='row'>$vehiclePlate</th>
                     <td>$vehicleMake</td>
@@ -65,7 +66,6 @@ $count = mysqli_num_rows($result);
             if (mysqli_num_rows($resultIncident)) {
                 while ($rowIncident = mysqli_fetch_assoc($resultIncident)) {
                     echo "
-                            ID: {$rowIncident['Incident_ID']}</br>
                             Statement: {$rowIncident['Incident_statement']}</br>
                             People: {$rowIncident['People_name']}</br>
                     ";
@@ -84,7 +84,6 @@ $count = mysqli_num_rows($result);
             </tbody>
             </table>
         </div>
-        <div id='editVehicleModal'><div>
         ";
     } else{
         echo "Vehicle Not Found."; 

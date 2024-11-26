@@ -7,7 +7,7 @@
 
     include("connection.php");
     // include("addVehicle.php");
-
+    $disabled = ($_SESSION['admin']) ? "" : "disabled";
     
 ?>
 
@@ -42,11 +42,11 @@
                             <a class="nav-link" href="/cw2/incident.php">INCIDENT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true" href="/cw2/officer.php">OFFICER</a>
+                            <a class="nav-link  <?php echo $disabled ?>" href="/cw2/officer.php">OFFICER</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="/cw2/account.php">Logged in as <b><?php echo $_SESSION['user']?></b></a></li>
                         <form method="POST" action="logout.php">
-                            <input type="submit" name="logout" value="Logout" />
+                            <input class="btn btn-outline-secondary" type="submit" name="logout" value="LOGOUT" />
                         </form>
                     </ul>
                 </div>
@@ -62,13 +62,27 @@
                 </div>
                 <!-- Search -->
                 <form id="vehicleSearchForm" method="POST">
-                    <div class="mb-3">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="targetPlate" id="targetPlate" placeholder="Search for Plate Number">
+                                <label for="targetPlate">Plate Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <span>
+                                <button type="submit" class="btn btn-outline-dark">Search</button>
+                                <a class="btn btn-dark" data-bs-target="#vehicleAddModal" data-bs-toggle="modal">ADD</a>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3">
                         <label for="targetPlate" class="form-label">Plate Number</label>
                         <input type="text" class="form-control" name="targetPlate" id="targetPlate">
                     </div>
-                    <button type="submit" class="btn btn-outline-dark">Search</button>
+                    <button type="submit" class="btn btn-outline-dark">Search</button> -->
                 </form>
-                <a style="margin-top: 1rem;" class="btn btn-dark" data-bs-target="#vehicleAddModal" data-bs-toggle="modal">ADD</a>
+               
                 <!-- Vehicle Table -->
                 <div id="vehicleList"></div>
             </div>

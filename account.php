@@ -7,7 +7,7 @@
 
     include("connection.php");
 
-    
+    $disabled = ($_SESSION['admin']) ? "" : "disabled";
 
     $officerId = $_SESSION["id"];
     $officerUsername = $_SESSION["user"];
@@ -61,11 +61,11 @@
                             <a class="nav-link" href="/cw2/incident.php">INCIDENT</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true" href="/cw2/officer.php">OFFICER</a>
+                            <a class="nav-link <?php echo $disabled ?>" aria-disabled="true" href="/cw2/officer.php">OFFICER</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="/cw2/account.php">Logged in as <b><?php echo $_SESSION['user']?></b></a></li>
                         <form method="POST" action="logout.php">
-                            <input type="submit" name="logout" value="Logout" />
+                        <input class="btn btn-outline-secondary" type="submit" name="logout" value="LOGOUT" />
                         </form>
 
                             <!-- <a class="nav-link" href="/login.php">LOGOUT</a> -->

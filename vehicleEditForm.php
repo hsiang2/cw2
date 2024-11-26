@@ -45,8 +45,9 @@
                             while($rowPeople = mysqli_fetch_array($resultPeople, MYSQLI_ASSOC)) {
                                 $peopleOptionID = $rowPeople["People_ID"];
                                 $peopleOptionName = $rowPeople["People_name"];
+                                $peopleOptionLicence = $rowPeople["People_licence"];
                                 $selected = ($peopleID==$peopleOptionID) ?  "selected" : "";
-                                echo "<option value=$peopleOptionID $selected>$peopleOptionID $peopleOptionName</option>";
+                                echo "<option value=$peopleOptionID $selected>$peopleOptionLicence $peopleOptionName</option>";
                             }
                         }
                         ?>
