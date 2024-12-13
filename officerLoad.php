@@ -21,12 +21,12 @@ $count = mysqli_num_rows($result);
                 <table class='table'>
                     <thead>
                         <tr>
-                            <th scope='col' style='white-space: nowrap;'>Actions</th>
                             <th scope='col' style='white-space: nowrap;'>Officer ID</th>
                             <th scope='col' style='white-space: nowrap;'>Name</th>
                             <th scope='col' style='white-space: nowrap;'>Username</th>
                             <th scope='col' style='white-space: nowrap;'>Password</th>
                             <th scope='col' style='white-space: nowrap;'>Admin</th>
+                            <th scope='col' style='white-space: nowrap;'>Actions</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -36,20 +36,19 @@ $count = mysqli_num_rows($result);
             $officerName = $row["Officer_name"];
             $officerUsername = $row["Officer_username"];
             $officerPassword = $row["Officer_password"];
-            $officerAdmin = $row["Officer_admin"] ? "admin" : "-";
+            $officerAdmin = $row["Officer_admin"];
+            $officerAdminPrint = $officerAdmin ? "admin" : "-";
                     
             echo "
-                <tr>
-                    <th>
-                        <a id='officerDeleteBtn' class='btn btn-outline-danger' data-id='$officerId' style='display: block; margin-bottom: 1rem'>DELETE</a>
-                        <a class='btn btn-outline-dark' data-bs-target='#officerEditModal' style='display: block;' data-bs-toggle='modal' data-id='$officerId' data-name='$officerName' data-username='$officerUsername' data-password='$officerPassword' data-admin='$officerPassword'>EDIT</a>
-                    </th>
+                <tr valign='middle'>
                     <th scope='row'>$officerId</th>
                     <td>$officerName</td>
                     <td>$officerUsername</td>
                     <td>$officerPassword</td>
-                    <td>$officerAdmin</td>
+                    <td>$officerAdminPrint</td>
                     <td>
+                        <a id='officerDeleteBtn' class='btn btn-outline-danger' data-id='$officerId' style='display: block; margin-bottom: 1rem'>DELETE</a>
+                        <a class='btn btn-outline-dark' data-bs-target='#officerEditModal' style='display: block;' data-bs-toggle='modal' data-id='$officerId' data-name='$officerName' data-username='$officerUsername' data-password='$officerPassword' data-admin='$officerAdmin'>EDIT</a>
                 ";
 
             // Edit
