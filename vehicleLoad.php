@@ -22,14 +22,14 @@ $count = mysqli_num_rows($result);
                 <table class='table'>
                     <thead>
                         <tr>
-                        <th scope='col' style='white-space: nowrap;'>Actions</th>
-                        <th scope='col' style='white-space: nowrap;'>Plate Number</th>
-                        <th scope='col' style='white-space: nowrap;'>Make</th>
-                        <th scope='col' style='white-space: nowrap;'>Model</th>
-                        <th scope='col' style='white-space: nowrap;'>Colour</th>
-                        <th scope='col' style='white-space: nowrap;'>Owner Name</th>
-                        <th scope='col' style='white-space: nowrap;'>Owner Licence</th>
-                        <th scope='col' style='white-space: nowrap;'>Incidents</th>
+                            <th scope='col' style='white-space: nowrap;'>Plate Number</th>
+                            <th scope='col' style='white-space: nowrap;'>Make</th>
+                            <th scope='col' style='white-space: nowrap;'>Model</th>
+                            <th scope='col' style='white-space: nowrap;'>Colour</th>
+                            <th scope='col' style='white-space: nowrap;'>Owner Name</th>
+                            <th scope='col' style='white-space: nowrap;'>Owner Licence</th>
+                            <th scope='col' style='white-space: nowrap;'>Incidents</th>
+                            <th scope='col' style='white-space: nowrap;'>Actions</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -50,11 +50,8 @@ $count = mysqli_num_rows($result);
             $resultIncident = mysqli_query($conn, $sqlIncident);
                     
             echo "
-                <tr>
-                    <th>
-                        <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: 1rem'>DELETE</a>
-                        <a class='btn btn-outline-dark' data-bs-target='#vehicleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
-                    </th>
+                <tr valign='middle'>
+                   
                     <th scope='row'>$vehiclePlate</th>
                     <td>$vehicleMake</td>
                     <td>$vehicleModel</td>
@@ -74,6 +71,13 @@ $count = mysqli_num_rows($result);
                 echo " - ";
             }   
 
+            echo " 
+            </td>
+            <td>
+            <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: 1rem'>DELETE</a>
+            <a class='btn btn-outline-dark' data-bs-target='#vehicleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
+                ";
+                
             // Edit
             include("vehicleEditForm.php");
 

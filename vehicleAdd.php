@@ -43,6 +43,6 @@
             echo json_encode($response); 
             exit;
         }  
-        $response['message'] = "Vehicle and Ownership updated successfully";
+        $response['message'] = "Vehicle and Ownership added successfully";
         echo json_encode($response); 
 ?>

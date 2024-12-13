@@ -31,7 +31,7 @@ $(function() {
     
 
     $(document).on('show.bs.modal', "#vehicleEditModal", function(event){
-        $('.modal-backdrop').remove();
+        // $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
         var id = button.data('id')
         var plate = button.data('plate')
@@ -58,10 +58,10 @@ $(function() {
     //     $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
     // });
 
-    $(document).on("submit", "#vehicleEditForm", function(event){
+    $(document).on('click', '#submit-edit', function () {
     // $(document).on('submit', 'form[id^="vehicleEditForm"]', function(event){
         event.preventDefault();
-        const form = $(this);
+        const form = $("#vehicleEditForm");
         const idEdit = parseInt(form.find("input[name='idEdit']").val(), 10);
         const plateEdit = form.find("input[name='plateEdit']").val().trim();
         const makeEdit = form.find("input[name='makeEdit']").val().trim();
@@ -140,27 +140,24 @@ $(function() {
                 } 
                 $('#alertText').text(response.message);
                 $("#alert").fadeIn();
-                $('#vehicleEditModal').modal('hide');
-                // $('.modal-backdrop').remove();
-
-                // form[0].reset();
-                // $(".modal-backdrop").remove(); // Remove lingering backdrops
-                // $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
+                form[0].submit();
+                // $('#vehicleEditModal').modal('hide');
+                
             },
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                $('#vehicleEditModal').modal('hide');
+                // $('#vehicleEditModal').modal('hide');
             }
         });
         
     });
 
-    $('#vehicleEditModal').on('hidden.bs.modal', function () {
-        $(".modal-backdrop").remove();
-        $("body").removeClass("modal-open").css("padding-right", "");
-        // console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
-    });
+    // $('#vehicleEditModal').on('hidden.bs.modal', function () {
+    //     $(".modal-backdrop").remove();
+    //     $("body").removeClass("modal-open").css("padding-right", "");
+    //     // console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
+    // });
 
 
     $(document).on('show.bs.modal', "#vehicleAddModal", function(event){
@@ -277,7 +274,7 @@ $(function() {
             data: {id},
             success: function (data){
                 if(data == 'error'){
-                    $('#alertText').text("There was an issue delete the note from the database!");
+                    $('#alertText').text("There was an issue deleting!");
                     $("#alert").fadeIn();
                 }else{
                     //remove containing div
