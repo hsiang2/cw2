@@ -54,7 +54,7 @@
             <div class="container" >
                 <h1>Search for Incidents</h1>
                 <!-- Alert -->
-                <div id="alert" class="alert alert-light alert-dismissible fade show" style="display: none;" role="alert">
+                <div id="alert" class="alert alert-primary alert-dismissible fade show" style="display: none;" role="alert">
                     <p id="alertText"></p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
