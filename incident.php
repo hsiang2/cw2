@@ -63,9 +63,14 @@
                     <div class="row g-2 align-items-center">
                         <div class="col-md">
                             <div class="form-floating">
-                                <input type="text" class="form-control" name="targetId" id="targetId" placeholder="Search for Incident ID">
-                                <label for="targetPlate">Incident ID</label>
-                                <!-- TODO other search input -->
+                                <input type="text" class="form-control" name="targetPlate" id="targetPlate" placeholder="Search for Plate Number">
+                                <label for="targetPlate">Plate Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input  type="text" class="form-control" name="targetLicence" id="targetLicence" placeholder="Search for Licence Number">
+                                <label for="targetLicence">Licence Number</label>
                             </div>
                         </div>
                         <div class="col-md">
@@ -73,10 +78,10 @@
                                 <button type="submit" class="btn btn-outline-dark">Search</button>
                                 <a class="btn btn-dark" data-bs-target="#incidentAddModal" data-bs-toggle="modal">ADD</a>
                             </span>
+                            <!-- <button type="submit" class="btn btn-outline-dark" value="Search">Search</button> -->
                         </div>
                     </div>
                 </form>
-               
                 <!-- Incident Table -->
                 <div id="incidentList"></div>
             </div>

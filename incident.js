@@ -55,34 +55,41 @@ $(function() {
         event.preventDefault();
         const form = $(this);
         const idEdit = parseInt(form.find("input[name='idEdit']").val(), 10);
-        const timeEdit = form.find("input[name='plateEdit']").val().trim();
-        const statementEdit = form.find("input[name='makeEdit']").val().trim();
-        const vehicleEdit = form.find("input[name='modelEdit']").val().trim();
-        const peopleEdit = form.find("input[name='colourEdit']").val().trim();
-        const offenceEdit = form.find("select[name='ownerEdit']").val() 
-            ? parseInt(form.find("select[name='ownerEdit']").val(), 10) 
-            : null;
-    
-   
+        const timeEdit = form.find("input[name='timeEdit']").val();
+        const statementEdit = form.find("input[name='statementEdit']").val().trim();
+        const vehicleEdit = form.find("select[name='vehicleEdit']").val() && form.find("select[name='vehicleEdit']").val() !== ""
+        ? parseInt(form.find("select[name='vehicleEdit']").val(), 10) 
+        : null;
+        const peopleEdit = form.find("select[name='peopleEdit']").val() && form.find("select[name='peopleEdit']").val() !== ""
+        ? parseInt(form.find("select[name='peopleEdit']").val(), 10) 
+        : null;
+        const offenceEdit = form.find("select[name='offenceEdit']").val() && form.find("select[name='offenceEdit']").val() !== ""
+        ? parseInt(form.find("select[name='offenceEdit']").val(), 10) 
+        : null;
         let hasError = false;
-       
-        if (!plateEdit) {
-            form.find("#plateError").show();
-            hasError = true;
-        }
     
-        if (!makeEdit) {
-            form.find("#makeError").show();
+        if (!timeEdit) {
+            form.find("#timeError").show();
             hasError = true;
         } 
     
-        if (!modelEdit) {
-            form.find("#modelError").show();
+        if (!statementEdit) {
+            form.find("#statementError").show();
             hasError = true;
         }
     
-        if (!colourEdit) {
-            form.find("#colourError").show();
+        if (!vehicleEdit) {
+            form.find("#vehicleError").show();
+            hasError = true;
+        } 
+
+        if (!peopleEdit) {
+            form.find("#peopleError").show();
+            hasError = true;
+        } 
+
+        if (!offenceEdit) {
+            form.find("#offenceError").show();
             hasError = true;
         } 
     
@@ -92,11 +99,11 @@ $(function() {
 
         const formData = {
             idEdit,
-            plateEdit,
-            makeEdit,
-            modelEdit,
-            colourEdit,
-            ownerEdit
+            timeEdit,
+            statementEdit,
+            vehicleEdit,
+            peopleEdit,
+            offenceEdit
         };
 
         // var formData = $(this).serializeArray();
@@ -138,34 +145,45 @@ $(function() {
     
     $("#incidentAddForm").off("submit").on("submit", function (event) {
         event.preventDefault();
+
         const form = $(this);
-        const plate = form.find("input[name='plate']").val().trim();
-        const make = form.find("input[name='make']").val().trim();
-        const model = form.find("input[name='model']").val().trim();
-        const colour = form.find("input[name='colour']").val().trim();
-        const owner = form.find("select[name='owner']").val() && form.find("select[name='owner']").val() !== ""
-            ? parseInt(form.find("select[name='owner']").val(), 10) 
-            : null;
+        const statement = form.find("input[name='statement']").val().trim();
+        const time = form.find("input[name='time']").val();
+        const vehicle = form.find("select[name='vehicle']").val() && form.find("select[name='vehicle']").val() !== ""
+        ? parseInt(form.find("select[name='vehicle']").val(), 10) 
+        : null;
+        const people = form.find("select[name='people']").val() && form.find("select[name='people']").val() !== ""
+        ? parseInt(form.find("select[name='people']").val(), 10) 
+        : null;
+        const offence = form.find("select[name='offence']").val() && form.find("select[name='offence']").val() !== ""
+        ? parseInt(form.find("select[name='offence']").val(), 10) 
+        : null;
+       
 
         let hasError = false;
         
-        if (!plate) {
-            form.find("#plateError").show();
+        if (!statement) {
+            form.find("#statementError").show();
             hasError = true;
         }
     
-        if (!make) {
-            form.find("#makeError").show();
+        if (!time) {
+            form.find("#timeError").show();
             hasError = true;
         } 
     
-        if (!model) {
-            form.find("#modelError").show();
+        if (!vehicle) {
+            form.find("#vehicleError").show();
             hasError = true;
         }
     
-        if (!colour) {
-            form.find("#colourError").show();
+        if (!people) {
+            form.find("#peopleError").show();
+            hasError = true;
+        } 
+
+        if (!offence) {
+            form.find("#offenceError").show();
             hasError = true;
         } 
     
@@ -174,11 +192,11 @@ $(function() {
         }
 
         const formData = {
-            plate,
-            make,
-            model,
-            colour,
-            owner
+            time,
+            statement,
+            vehicle,
+            people,
+            offence
         };
 
         $.ajax({
@@ -211,14 +229,33 @@ $(function() {
         $("body").removeClass("modal-open").css("padding-right", "");
     });
 
-    $("#fineAddForm").off("submit").on("submit", function (event) {
-        event.preventDefault();
-
+    $(document).on('show.bs.modal', "#fineModal", function(event){
+        $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
+
+        var incident = button.data('incident')
         var id = button.data('id')
-        console.log(id)
+        var amount = button.data('amount')
+        var points = button.data('points')
+
+        var modal = $(this)
+        modal.find(".text-danger").hide();
+        modal.find('.modal-body input[name="id"]').val(id);
+        modal.find('.modal-body input[name="incident"]').val(incident);
+        modal.find('.modal-body input[name="amount"]').val(amount);
+        modal.find('.modal-body input[name="points"]').val(points);
+    });
+
+    $(document).on("submit", "#fineForm", function (event) {
+        event.preventDefault();
+        // var button = $(event.relatedTarget) 
+        // var id = button.data('id')
+        // console.log(id)
 
         const form = $(this);
+        const fineId = form.find("input[name='id']").val() ? parseInt(form.find("input[name='id']").val(), 10) 
+        : null;
+        const incident = parseInt(form.find("input[name='incident']").val(), 10);
         const amount = form.find("input[name='amount']").val().trim();
         const points = form.find("input[name='points']").val().trim();
 
@@ -239,16 +276,24 @@ $(function() {
         }
 
         const formData = {
-            id,
+            fineId,
+            incident,
             amount,
             points
         };
 
         $.ajax({
-            url: "fineAdd.php",
+            url: "fineUpdate.php",
             type: "POST",
             data: formData,
             success: function (res){
+            //console.log("Raw response:", res); // Log the raw response to inspect it
+            // try {
+            //     const response = JSON.parse(res); // Try parsing the response
+            //     console.log("Parsed response:", response); // Log the parsed response
+            // } catch (e) {
+            //     console.error("Failed to parse JSON:", e); // Catch and log any errors
+            // }
                 try {
                     const response = JSON.parse(res);
                     if (response.success) {
@@ -256,7 +301,7 @@ $(function() {
                     } 
                     $('#alertText').text(response.message);
                     $("#alert").fadeIn();
-                    $('#fineAddModal').modal('hide');
+                    $('#fineModal').modal('hide');
                 } catch (e) {
                     console.error("Failed to parse JSON:", e, res); // Catch and log any errors
                 }
@@ -264,18 +309,26 @@ $(function() {
             error: function(){
                 $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
                 $("#alert").fadeIn();
-                $('#fineAddModal').modal('hide');
+                $('#fineModal').modal('hide');
             }
         });
+    });
+
+    $('#fineModal').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
     });
 
 
     $(document).on('click', "#incidentDeleteBtn", function(event){
         var id = $(this).data('id')
+        var fine = $(this).data('fine') ? parseInt($(this).data('fine'), 10) 
+        : null;
+
         $.ajax({
             url: "incidentDelete.php",
             type: "POST",
-            data: {id},
+            data: {id, fine},
             success: function (data){
                 if(data == 'error'){
                     $('#alertText').text("There was an issue delete the note from the database!");

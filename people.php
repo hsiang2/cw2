@@ -59,13 +59,13 @@
                         <div class="col-md">
                             <div class="form-floating">
                                 <input  type="text" class="form-control" name="name" id="name" placeholder="Search for Name">
-                                <label for="licence">Name</label>
+                                <label for="name">Name</label>
                             </div>
                         </div>
                         <div class="col-md">
                             <div class="form-floating">
                                 <input  type="text" class="form-control" name="licence" id="licence" placeholder="Search for Licence Number">
-                                <label for="name">Licence Number</label>
+                                <label for="licence">Licence Number</label>
                             </div>
                         </div>
                         <div class="col-md">
