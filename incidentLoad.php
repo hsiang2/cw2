@@ -107,8 +107,8 @@ $count = mysqli_num_rows($result);
             echo"
                     </td>
                     <td>
-                        <a id='incidentDeleteBtn' class='btn btn-outline-danger' data-id='$incidentId' data-fine='$fineId' style='display: block; margin-bottom: 1rem'>DELETE</a>
-                        <a class='btn btn-outline-dark' data-bs-target='#incidentEditModal' data-bs-toggle='modal' style='display: block; margin-bottom: 1rem' data-id='$incidentId' data-time='$incidentTime' data-statement='$incidentStatement' data-vehicle='$vehicleId' data-people='$peopleId' data-offence='$offenceId'>EDIT</a>
+                        <a id='incidentDeleteBtn' class='btn btn-outline-danger' data-id='$incidentId' data-fine='$fineId' style='display: block; margin-bottom: .4rem'>DELETE</a>
+                        <a class='btn btn-outline-dark' data-bs-target='#incidentEditModal' data-bs-toggle='modal' style='display: block; margin-bottom: .4rem' data-id='$incidentId' data-time='$incidentTime' data-statement='$incidentStatement' data-vehicle='$vehicleId' data-people='$peopleId' data-offence='$offenceId'>EDIT</a>
                         <button class='btn btn-outline-dark' data-bs-target='#fineModal' data-bs-toggle='modal' style='display: block; width: 100%' data-incident='$incidentId' data-id='$fineId' data-amount='$fineAmount' data-points='$finePoints' $disabled>FINE</button>
                 ";
 
@@ -126,6 +126,6 @@ $count = mysqli_num_rows($result);
         </div>
         ";
     } else{
-        echo "Incident Not Found."; 
+        echo "<div class='message-not-found'>Incident Not Found.</div>"; 
     }
 ?>

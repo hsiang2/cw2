@@ -28,7 +28,7 @@
                     <span class="text-danger" id="licenceError" style="display:none;">Please Enter Licence Number.</span>
                 </div>
             <div class="modal-footer">
-                <button type="submit" id="submit-people-add" class="btn btn-outline-dark">SAVE</button>
+                <button type="submit" id="submit-people-add" class="btn btn-dark">SAVE</button>
             </div>
             </div>
         </div>

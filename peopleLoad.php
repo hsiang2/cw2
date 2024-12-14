@@ -55,12 +55,15 @@
                     <td>$licence</td>
                     <td>$totalFinePoints</td>
                     <td>
+                        <div class='d-grid gap-3'>
                 ";
             if (mysqli_num_rows($resultFine)) {
                 while ($rowFine = mysqli_fetch_assoc($resultFine)) {
                     echo "
+                        <div>
                             Points: {$rowFine['Fine_points']}</br>
                             Amount: {$rowFine['Fine_amount']}</br>
+                        </div>
                     ";
                 }
             } else {
@@ -68,9 +71,10 @@
             }   
 
             echo " 
+                </div>
             </td>
             <td>
-            <a id='peopleDeleteBtn' class='btn btn-outline-danger' data-id='$id' style='display: block; margin-bottom: 1rem'>DELETE</a>
+            <a id='peopleDeleteBtn' class='btn btn-outline-danger' data-id='$id' style='display: block; margin-bottom: .4rem'>DELETE</a>
             <a class='btn btn-outline-dark' data-bs-target='#peopleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$id' data-name='$name' data-address='$address' data-dob='$dob' data-licence='$licence'>EDIT</a>
                 ";
                 
@@ -84,6 +88,6 @@
             </table>
         </div>";
     } else{
-        echo "Person Not Found."; 
+        echo "<div class='message-not-found'>Person Not Found.</div>"; 
     }
 ?>

@@ -59,12 +59,15 @@ $count = mysqli_num_rows($result);
                     <td>$peopleName</td>
                     <td>$peopleLicence</td>
                     <td>
+                        <div class='d-grid gap-3'>
                 ";
             if (mysqli_num_rows($resultIncident)) {
                 while ($rowIncident = mysqli_fetch_assoc($resultIncident)) {
                     echo "
+                        <div>
                             Statement: {$rowIncident['Incident_statement']}</br>
                             People: {$rowIncident['People_name']}</br>
+                        </div>
                     ";
                 }
             } else {
@@ -72,9 +75,10 @@ $count = mysqli_num_rows($result);
             }   
 
             echo " 
+                </div>
             </td>
             <td>
-            <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: 1rem'>DELETE</a>
+            <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: .4rem'>DELETE</a>
             <a class='btn btn-outline-dark' data-bs-target='#vehicleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
                 ";
                 
@@ -90,6 +94,6 @@ $count = mysqli_num_rows($result);
         </div>
         ";
     } else{
-        echo "Vehicle Not Found."; 
+        echo "<div class='message-not-found'>Vehicle Not Found.</div>"; 
     }
 ?>

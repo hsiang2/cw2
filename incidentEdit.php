@@ -9,7 +9,7 @@
 
     if (!mysqli_query($conn, $sqlEdit)) {
         $response['success'] = false;  // If vehicle update fails, set success to false
-        $response['message'] = "Error updating vehicle details";  // Immediate failure message
+        $response['message'] = "Error updating incident";  // Immediate failure message
         echo json_encode($response); 
         exit;
     } 
@@ -44,6 +44,6 @@
     //     }
     // }
 
-    $response['message'] = "Vehicle and Ownership updated successfully";
+    $response['message'] = "Incident updated successfully";
     echo json_encode($response); 
 ?>

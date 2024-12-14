@@ -53,49 +53,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Police Traffic Website | Login</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Oranienbaum&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="./style.css">
     </head>
     <body>
         <main>
             <div class="container">
-                <h1>Login</h1>
-                <?php
-                //   if(isset($_SESSION["user"]) && isset($_SESSION["id"])) {
-                ?>
-                <!-- <form method="POST"> -->
-                <?php
-                //  echo "<p>" . $_SESSION["user"] . " is logged in</p>";
-                ?>
-                    <!-- <input type="submit" name="logout" value="Logout" />
-                </form> -->
-                <?php
-                    // } else 
-                    // if (!isset($_SESSION["user"]) && !isset($_SESSION["id"])) {
+                <div class="login-form">
+                    <h1 class="login-title">Login</h1>
+                    <?php
                         if ($loginError)
-                            echo "<p>Invalid Username or Password</p>";
-                ?>
-                <form method="POST">
-                    <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" id="username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" required>
-                    </div>
-                    <button type="submit" class="btn btn-dark" value="Login">Submit</button>
-                </form>
-                <!-- <form method="POST">
-                    Username: 
-                    <input name="username" type="text" id="username" value="" size="30"  maxlength="32" required/><br/>
-
-                    Password:
-                    <input name="password" type="password" id="password" value="" size="30"  maxlength="32" required/><br/>
-                    <input name="login" type="submit" value="Login"/>
-                </form> -->
-                <?php
-                    // }
-                ?>
+                            echo "<span class='text-danger'>Invalid Username or Password</span>";
+                    ?>
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="password" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark login-btn" value="Login">SUBMIT</button>
+                    </form>
+                </div>
             </div>
         </main>
         <footer class="footer">

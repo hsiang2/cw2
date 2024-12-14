@@ -47,8 +47,8 @@ $count = mysqli_num_rows($result);
                     <td>$officerPassword</td>
                     <td>$officerAdminPrint</td>
                     <td>
-                        <a id='officerDeleteBtn' class='btn btn-outline-danger' data-id='$officerId' style='display: block; margin-bottom: 1rem'>DELETE</a>
-                        <a class='btn btn-outline-dark' data-bs-target='#officerEditModal' style='display: block;' data-bs-toggle='modal' data-id='$officerId' data-name='$officerName' data-username='$officerUsername' data-password='$officerPassword' data-admin='$officerAdmin'>EDIT</a>
+                        <a id='officerDeleteBtn' class='btn btn-outline-danger' data-id='$officerId' style='display: block; margin-bottom: .4rem'>DELETE</a>
+                        <a class='btn btn-outline-dark' data-bs-target='#officerEditModal'  style='display: block;' data-bs-toggle='modal' data-id='$officerId' data-name='$officerName' data-username='$officerUsername' data-password='$officerPassword' data-admin='$officerAdmin'>EDIT</a>
                 ";
 
             // Edit
@@ -62,6 +62,6 @@ $count = mysqli_num_rows($result);
         </div>
         ";
     } else{
-        echo "Officer Not Found."; 
+        echo "<div class='message-not-found'>Officer Not Found.</div>"; 
     }
 ?>
