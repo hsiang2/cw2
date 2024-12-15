@@ -6,18 +6,8 @@
 
     $loginError = FALSE;
 
-    // if (isset($_POST["logout"])) {
-    //     unset($_SESSION["user"]);
-    //     unset($_SESSION["id"]);
-    // }
-
     if(isset($_POST["username"]) && isset($_POST["password"])) {
-        // require("db.inc.php");
-        // $conn = mysqli_connect($servername, $username, $password, $dbname);
-        // if(!$conn) {
-        //     die("Connection failed");
-        // }
-        include("connection.php");
+        include("./common/connection.php");
 
         $officerUsername = $_POST["username"];
         $officerPassword = $_POST["password"];

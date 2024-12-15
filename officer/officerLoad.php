@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
- include("connection.php");
+ include("../common/connection.php");
 
 $targetId = $_POST["targetId"] ?? '';
 

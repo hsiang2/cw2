@@ -1,16 +1,16 @@
 <?php
     session_start();
     if (!isset($_SESSION["user"]) || !isset($_SESSION["id"])) {
-        header("Location: login.php");
+        header("Location: /cw2/login.php");
         exit();
     }
 
-    include("connection.php");
+    include("../common/connection.php");
 
     $officerId = $_SESSION["id"];
     $officerUsername = $_SESSION["user"];
 
-    include("updateAccount.php");
+    
 
     $sql = "SELECT * FROM Officer WHERE Officer_ID='$officerId'";
     $result = mysqli_query($conn, $sql);
@@ -32,22 +32,24 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Police Traffic Website</title>
+        <title>Police Traffic Website | Account</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Oranienbaum&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="../style.css">
     </head>
     <body>
         <?php
-            include("header.php");
+            include("../common/header.php");
         ?>
         <main>
             <div class="container">
-                
                     <div class="login-form">
                     <h1 class="custom-title">Manage Account</h1>
+                    <?php
+                        include("updateAccount.php");
+                    ?>
                         <form method="POST">
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
@@ -61,11 +63,6 @@
                                 <label for="name" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="name" name="name" value="<?php echo $officerName?>">
                             </div>
-                            <!-- <div class="mb-3">
-                                <label for="id" class="form-label">Officer ID</label>
-                                <input type="text" class="form-control" id="id" name="id" value="<?php echo $officerId?>">
-                            </div> -->
-
                             <button type="submit" class="btn btn-dark login-btn" value="Update">UPDATE</button>
                         </form>
                     </div>

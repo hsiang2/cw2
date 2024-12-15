@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="ownerEdit" class="form-label">Owner</label>
+                    <label for="ownerEdit" class="form-label">Owner (Optional)</label>
                     <select class="form-select" name="ownerEdit" id="ownerEdit">
                         <option <?php echo $peopleID ? "" : "selected"; ?> value=null>Select Owner</option>
                         <?php

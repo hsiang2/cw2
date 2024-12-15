@@ -1,5 +1,5 @@
 <?php
-    include('connection.php');
+    include('../common/connection.php');
     session_start();
     $officerId = $_SESSION["id"];
 

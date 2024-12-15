@@ -1,10 +1,10 @@
 <?php
     session_start();
     if (!isset($_SESSION["user"]) || !isset($_SESSION["id"])) {
-        header("Location: login.php");
+        header("Location: /cw2/login.php");
         exit();
     }
-    include("connection.php");
+    include("../common/connection.php");
 ?>
 
 <!DOCTYPE html>
@@ -17,11 +17,11 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&family=Oranienbaum&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="../style.css">
     </head>
     <body>
         <?php
-            include("header.php");
+            include("../common/header.php");
         ?>
         <main>
             <div class="container" >

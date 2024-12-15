@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION["user"]) || !isset($_SESSION["id"])) {
-        header("Location: login.php");
+        header("Location: /cw2/login.php");
         exit();
     }
 
@@ -22,7 +22,7 @@
     </head>
     <body>
         <?php
-            include("header.php");
+            include("common/header.php");
         ?>
         <main>
             <div class="banner">

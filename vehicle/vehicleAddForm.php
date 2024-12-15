@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="owner" class="form-label">Owner</label>
+                    <label for="owner" class="form-label">Owner (Optional)</label>
                     <select class="form-select" name="owner" id="owner">
                         <option selected value="">Select Owner</option>
                         <?php

@@ -5,6 +5,6 @@
         unset($_SESSION["id"]);
         unset($_SESSION["admin"]);
     }
-    header("Location: login.php");
+    header("Location: /cw2/login.php");
     exit();
 ?>

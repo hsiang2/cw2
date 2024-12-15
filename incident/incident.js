@@ -293,7 +293,7 @@ $(function() {
 
 
     $(document).on('click', "#incidentDeleteBtn", function(event){
-        var id = $(this).data('id')
+        var id = parseInt($(this).data('id'), 10) 
         var fine = $(this).data('fine') ? parseInt($(this).data('fine'), 10) 
         : null;
 
