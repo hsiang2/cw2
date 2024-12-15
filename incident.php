@@ -27,11 +27,6 @@
         <main>
             <div class="container" >
                 <h1 class="custom-title">Search for Incidents</h1>
-                <!-- Alert -->
-                <div id="alert" class="alert alert-primary alert-dismissible fade show" style="display: none;" role="alert">
-                    <p id="alertText"></p>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
                 <!-- Search -->
                 <form id="incidentSearchForm" method="POST">
                     <div class="row g-2 align-items-center">
@@ -53,6 +48,11 @@
                         </span>
                     </div>
                 </form>
+                 <!-- Alert -->
+                 <div id="alert" class="alert alert-waring alert-dismissible fade show mt-3" style="display: none;" role="alert">
+                    <p id="alertText"></p>
+                    <button type="button" class="btn-close" aria-label="Close"></button>
+                </div>
                 <!-- Incident Table -->
                 <div id="incidentList"></div>
             </div>

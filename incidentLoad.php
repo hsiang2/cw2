@@ -11,20 +11,11 @@ $targetLicence = $_POST["targetLicence"] ?? '';
 if ($targetPlate !== '' || $targetLicence !== '') {
     $sql = "SELECT Incident.Incident_ID, Incident.Incident_time, Incident.Incident_statement,  Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, People.People_ID, People.People_name, People.People_licence, Offence.Offence_ID, Offence.Offence_description, Officer.Officer_ID 
     FROM Incident JOIN Vehicle ON Incident.Vehicle_ID = Vehicle.Vehicle_ID JOIN People ON Incident.People_ID = People.People_ID JOIN Offence ON Incident.Offence_ID = Offence.Offence_ID JOIN Officer ON Incident.Officer_ID = Officer.Officer_ID
-    WHERE Vehicle.Vehicle_plate='$targetPlate' OR People.People_licence='$targetLicence'";
+    WHERE Vehicle.Vehicle_plate='$targetPlate' OR People.People_licence='$targetLicence' ORDER BY Incident.Incident_ID DESC";
 } else {
     $sql = "SELECT Incident.Incident_ID, Incident.Incident_time, Incident.Incident_statement,  Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, People.People_ID, People.People_name, People.People_licence, Offence.Offence_ID, Offence.Offence_description, Officer.Officer_ID 
-    FROM Incident JOIN Vehicle ON Incident.Vehicle_ID = Vehicle.Vehicle_ID JOIN People ON Incident.People_ID = People.People_ID JOIN Offence ON Incident.Offence_ID = Offence.Offence_ID  JOIN Officer ON Incident.Officer_ID = Officer.Officer_ID";
+    FROM Incident JOIN Vehicle ON Incident.Vehicle_ID = Vehicle.Vehicle_ID JOIN People ON Incident.People_ID = People.People_ID JOIN Offence ON Incident.Offence_ID = Offence.Offence_ID  JOIN Officer ON Incident.Officer_ID = Officer.Officer_ID ORDER BY Incident.Incident_ID DESC";
 }
-
-// if ($targetName !== '' || $targetLicence !== '') {
-//     $sql = "SELECT People.People_name, People.People_licence, People.People_ID, People.People_address, People.People_DOB, SUM(Fine.Fine_points) AS total_fine_points 
-//     FROM People LEFT JOIN Incident ON People.People_ID = Incident.People_ID LEFT JOIN Fine ON Incident.Incident_ID = Fine.Incident_ID
-//     WHERE People.People_name='$targetName' OR People.People_licence='$targetLicence' GROUP BY People.People_ID";
-// } else {
-//      $sql =  "SELECT People.People_name, People.People_licence, People.People_ID, People.People_address, People.People_DOB, SUM(Fine.Fine_points) AS total_fine_points 
-//     FROM People LEFT JOIN Incident ON People.People_ID = Incident.People_ID LEFT JOIN Fine ON Incident.Incident_ID = Fine.Incident_ID GROUP BY People.People_ID";
-// }
   
 
 $result = mysqli_query($conn, $sql);
@@ -73,19 +64,7 @@ $count = mysqli_num_rows($result);
                 $fineAmount = 0; 
                 $finePoints = 0; 
             }
-            // && !(mysqli_num_rows($resultFine))
-            $disabled = ($_SESSION['admin']) ? "" : "disabled";
-            // ";
-            // if (mysqli_num_rows($resultFine)) {
-            //     while ($rowFine = mysqli_fetch_assoc($resultFine)) {
-            //         echo "
-            //                 Amount: {$rowFine['Fine_amount']}</br>
-            //                 Points: {$rowFine['Fine_points']}</br>
-            //         ";
-            //     }
-            // } else {
-            //     echo " - ";
-            // }   
+            $disabled = ($_SESSION['admin']) ? "" : "disabled"; 
             echo "
                 <tr valign='middle'>
                     <th scope='row'>$incidentStatement</th>

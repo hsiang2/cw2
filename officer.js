@@ -6,14 +6,12 @@ $(function() {
 
         },
         error: function() {
-            $('#alertText').text("There was an error with the Ajax Call");
-            $("#alert").fadeIn();
+            showAlert("There was an error with the Ajax Call")
         }
     });
 
     $("#officerSearchForm").submit(function(event) {
         event.preventDefault();  
-    
         var formData = $(this).serializeArray();
     
         $.ajax({
@@ -29,9 +27,8 @@ $(function() {
         });
     });
 
-
     $(document).on('show.bs.modal', "#officerEditModal", function(event){
-        // $('.modal-backdrop').remove();
+        $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
 
         var id = button.data('id')
@@ -42,20 +39,20 @@ $(function() {
 
         var modal = $(this)
         modal.find(".text-danger").hide();
-        modal.find('.modal-body input[name="idEdit"]').val(id);
-        modal.find('.modal-body input[name="nameEdit"]').val(name);
-        modal.find('.modal-body input[name="usernameEdit"]').val(username);
-        modal.find('.modal-body input[name="passwordEdit"]').val(password);
+        modal.find('input[name="idEdit"]').val(id);
+        modal.find('input[name="nameEdit"]').val(name);
+        modal.find('input[name="usernameEdit"]').val(username);
+        modal.find('input[name="passwordEdit"]').val(password);
         if (admin) {
-            modal.find(".modal-body input[name='adminEdit']").prop("checked", true);
+            modal.find("input[name='adminEdit']").prop("checked", true);
         } else {
-            modal.find(".modal-body input[name='adminEdit']").prop("checked", false);
+            modal.find("input[name='adminEdit']").prop("checked", false);
         }
     });
-    
-    $(document).on('click', '#submit-officer-edit', function () {
+
+    $(document).on("submit", "#officerEditForm", function(event){
         event.preventDefault();  
-        const form = $("#officerEditForm");
+        const form = $(this);
         const idEdit = form.find("input[name='idEdit']").val().trim();
         const nameEdit = form.find("input[name='nameEdit']").val().trim();
         const usernameEdit = form.find("input[name='usernameEdit']").val().trim();
@@ -96,40 +93,42 @@ $(function() {
             adminEdit
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "officerEdit.php",
             type: "POST",
             data: formData,
             success: function (res){
-                const response = JSON.parse(res);
-                if (response.success) {
+                if (res.success) {
                     $('#officerList').load('officer.php');
-                } 
-                $('#alertText').text(response.message);
-                $("#alert").fadeIn();
-                form[0].submit();
+                } else {
+                    showAlert(res.message)
+                }
+                $('#officerEditModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
+                $('#officerEditModal').modal('hide');
             }
         });
             
     });
 
+    $('#officerEditModal').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+    });
+
     $(document).on('show.bs.modal', "#officerAddModal", function(event){
-        // $('.modal-backdrop').remove();
+        $('.modal-backdrop').remove();
 
         var modal = $(this)
         modal.find(".text-danger").hide();
         modal.find('.modal-body input').val("");
-        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
     });
 
-    $(document).on('click', '#submit-officer-add', function () {
+    $("#officerAddForm").on("submit", function (event) {
         event.preventDefault();  
-        const form = $("#officerAddForm");
+        const form = $(this);
         const id = form.find("input[name='id']").val().trim();
         const name = form.find("input[name='name']").val().trim();
         const username = form.find("input[name='username']").val().trim();
@@ -170,26 +169,28 @@ $(function() {
             admin
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "officerAdd.php",
             type: "POST",
             data: formData,
             success: function (res){
-                const response = JSON.parse(res);
-                if (response.success) {
+                if (res.success) {
                     $('#officerList').load('officer.php');
-                } 
-                $('#alertText').text(response.message);
-                $("#alert").fadeIn();
-                form[0].submit();
+                } else {
+                    showAlert(res.message);
+                }
+                $('#officerAddModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.");
+                $('#officerAddModal').modal('hide');
             }
         });
-        
+    });
+
+    $('#officerAddForm').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
     });
 
     $(document).on('click', "#officerDeleteBtn", function(event){
@@ -198,20 +199,25 @@ $(function() {
             url: "officerDelete.php",
             type: "POST",
             data: {id},
-            success: function (data){
-                if(data == 'error'){
-                    $('#alertText').text("There was an issue deleting!");
-                    $("#alert").fadeIn();
-                }else{
+            success: function (res){
+                if (res.success) {
                     $('#officerList').load('officer.php');
+                } else {
+                    showAlert(res.message)
                 }
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
             }
-
         });
-        
+    });
+
+    function showAlert(message) {
+        $('#alertText').text(message); 
+        $("#alert").fadeIn();       
+    }
+
+    $('#alert .btn-close').on('click', function () {
+        $("#alert").fadeOut(); 
     });
 })

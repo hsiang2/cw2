@@ -9,13 +9,12 @@
     if ($targetName !== '' || $targetLicence !== '') {
         $sql = "SELECT People.People_name, People.People_licence, People.People_ID, People.People_address, People.People_DOB, SUM(Fine.Fine_points) AS total_fine_points 
         FROM People LEFT JOIN Incident ON People.People_ID = Incident.People_ID LEFT JOIN Fine ON Incident.Incident_ID = Fine.Incident_ID
-        WHERE People.People_name='$targetName' OR People.People_licence='$targetLicence' GROUP BY People.People_ID";
+        WHERE People.People_name='$targetName' OR People.People_licence='$targetLicence' GROUP BY People.People_ID ORDER BY People.People_ID DESC";
     } else {
-            $sql =  "SELECT People.People_name, People.People_licence, People.People_ID, People.People_address, People.People_DOB, SUM(Fine.Fine_points) AS total_fine_points 
-        FROM People LEFT JOIN Incident ON People.People_ID = Incident.People_ID LEFT JOIN Fine ON Incident.Incident_ID = Fine.Incident_ID GROUP BY People.People_ID";
+        $sql =  "SELECT People.People_name, People.People_licence, People.People_ID, People.People_address, People.People_DOB, SUM(Fine.Fine_points) AS total_fine_points 
+        FROM People LEFT JOIN Incident ON People.People_ID = Incident.People_ID LEFT JOIN Fine ON Incident.Incident_ID = Fine.Incident_ID GROUP BY People.People_ID ORDER BY People.People_ID DESC";
     }
         
-    // $sql = "SELECT * FROM People WHERE People_name LIKE '%$targetName%' OR People_licence LIKE '%$targetLicence%'";
     $result = mysqli_query($conn, $sql);
     $count = mysqli_num_rows($result);
     if($count > 0) {
@@ -74,7 +73,7 @@
                 </div>
             </td>
             <td>
-            <a id='peopleDeleteBtn' class='btn btn-outline-danger' data-id='$id' style='display: block; margin-bottom: .4rem'>DELETE</a>
+            <a id='peopleDeleteBtn' class='btn btn-outline-danger' data-id='$id' data-licence='$licence' style='display: block; margin-bottom: .4rem'>DELETE</a>
             <a class='btn btn-outline-dark' data-bs-target='#peopleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$id' data-name='$name' data-address='$address' data-dob='$dob' data-licence='$licence'>EDIT</a>
                 ";
                 

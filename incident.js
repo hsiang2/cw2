@@ -6,14 +6,12 @@ $(function() {
 
         },
         error: function() {
-            $('#alertText').text("There was an error with the Ajax Call");
-            $("#alert").fadeIn();
+            showAlert("There was an error with the Ajax Call")
         }
     });
 
     $("#incidentSearchForm").submit(function(event) {
         event.preventDefault();  
-    
         var formData = $(this).serializeArray();
     
         $.ajax({
@@ -43,12 +41,12 @@ $(function() {
 
         var modal = $(this)
         modal.find(".text-danger").hide();
-        modal.find('.modal-body input[name="idEdit"]').val(id);
-        modal.find('.modal-body input[name="timeEdit"]').val(time);
-        modal.find('.modal-body input[name="statementEdit"]').val(statement);
-        modal.find('.modal-body input[name="vehicleEdit"]').val(vehicle);
-        modal.find('.modal-body input[name="peopleEdit"]').val(people);
-        modal.find('.modal-body select[name="offenceEdit"]').val(offence);
+        modal.find('input[name="idEdit"]').val(id);
+        modal.find('input[name="timeEdit"]').val(time);
+        modal.find('input[name="statementEdit"]').val(statement);
+        modal.find('input[name="vehicleEdit"]').val(vehicle);
+        modal.find('input[name="peopleEdit"]').val(people);
+        modal.find('select[name="offenceEdit"]').val(offence);
     });
 
     $(document).on("submit", "#incidentEditForm", function(event){
@@ -106,23 +104,20 @@ $(function() {
             offenceEdit
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "incidentEdit.php",
             type: "POST",
             data: formData,
             success: function (res){
-                const response = JSON.parse(res);
-                if (response.success) {
+                if (res.success) {
                     $('#incidentList').load('incident.php');
-                } 
-                $('#alertText').text(response.message);
-                $("#alert").fadeIn();
+                } else {
+                    showAlert(res.message)
+                }
                 $('#incidentEditModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
                 $('#incidentEditModal').modal('hide');
             }
         });
@@ -143,7 +138,7 @@ $(function() {
         modal.find('.modal-body select').val("");
     });
     
-    $("#incidentAddForm").off("submit").on("submit", function (event) {
+    $("#incidentAddForm").on("submit", function (event) {
         event.preventDefault();
 
         const form = $(this);
@@ -158,7 +153,6 @@ $(function() {
         const offence = form.find("select[name='offence']").val() && form.find("select[name='offence']").val() !== ""
         ? parseInt(form.find("select[name='offence']").val(), 10) 
         : null;
-       
 
         let hasError = false;
         
@@ -204,21 +198,15 @@ $(function() {
             type: "POST",
             data: formData,
             success: function (res){
-                try {
-                    const response = JSON.parse(res);
-                    if (response.success) {
-                        $('#incidentList').load('incident.php');
-                    } 
-                    $('#alertText').text(response.message);
-                    $("#alert").fadeIn();
-                    $('#incidentAddModal').modal('hide');
-                } catch (e) {
-                    console.error("Failed to parse JSON:", e, res); // Catch and log any errors
+                if (res.success) {
+                    $('#incidentList').load('incident.php');
+                } else {
+                    showAlert(res.message);
                 }
+                $('#incidentAddModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.");
                 $('#incidentAddModal').modal('hide');
             }
         });
@@ -240,17 +228,14 @@ $(function() {
 
         var modal = $(this)
         modal.find(".text-danger").hide();
-        modal.find('.modal-body input[name="id"]').val(id);
-        modal.find('.modal-body input[name="incident"]').val(incident);
-        modal.find('.modal-body input[name="amount"]').val(amount);
-        modal.find('.modal-body input[name="points"]').val(points);
+        modal.find('input[name="id"]').val(id);
+        modal.find('input[name="incident"]').val(incident);
+        modal.find('input[name="amount"]').val(amount);
+        modal.find('input[name="points"]').val(points);
     });
 
     $(document).on("submit", "#fineForm", function (event) {
         event.preventDefault();
-        // var button = $(event.relatedTarget) 
-        // var id = button.data('id')
-        // console.log(id)
 
         const form = $(this);
         const fineId = form.find("input[name='id']").val() ? parseInt(form.find("input[name='id']").val(), 10) 
@@ -287,28 +272,15 @@ $(function() {
             type: "POST",
             data: formData,
             success: function (res){
-            //console.log("Raw response:", res); // Log the raw response to inspect it
-            // try {
-            //     const response = JSON.parse(res); // Try parsing the response
-            //     console.log("Parsed response:", response); // Log the parsed response
-            // } catch (e) {
-            //     console.error("Failed to parse JSON:", e); // Catch and log any errors
-            // }
-                try {
-                    const response = JSON.parse(res);
-                    if (response.success) {
-                        $('#incidentList').load('incident.php');
-                    } 
-                    $('#alertText').text(response.message);
-                    $("#alert").fadeIn();
-                    $('#fineModal').modal('hide');
-                } catch (e) {
-                    console.error("Failed to parse JSON:", e, res); // Catch and log any errors
+                if (res.success) {
+                    $('#incidentList').load('incident.php');
+                } else {
+                    showAlert(res.message)
                 }
+                $('#fineModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
                 $('#fineModal').modal('hide');
             }
         });
@@ -329,19 +301,26 @@ $(function() {
             url: "incidentDelete.php",
             type: "POST",
             data: {id, fine},
-            success: function (data){
-                if(data == 'error'){
-                    $('#alertText').text("There was an issue delete the note from the database!");
-                    $("#alert").fadeIn();
-                }else{
+            success: function (res){
+                if(res.success){
                     $('#incidentList').load('incident.php');
+                }else{
+                    showAlert(res.message)
                 }
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
             }
         });
         
+    });
+
+    function showAlert(message) {
+        $('#alertText').text(message); 
+        $("#alert").fadeIn();       
+    }
+
+    $('#alert .btn-close').on('click', function () {
+        $("#alert").fadeOut(); 
     });
 })

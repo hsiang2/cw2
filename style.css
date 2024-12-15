@@ -74,6 +74,11 @@ body {
     border: 1px solid var(--dark);
 }
 
+.form-select {
+    background-color: transparent;
+    border: 1px solid var(--dark);
+}
+
 .navbar {
     background-color: #E3E7F195;
 }

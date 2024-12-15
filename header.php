@@ -23,6 +23,9 @@
                 <li class="nav-item">
                     <a class="nav-link  <?php echo $disabled ?>" href="/cw2/officer.php">OFFICER</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link  <?php echo $disabled ?>" href="/cw2/audit.php">AUDIT</a>
+                </li>
                 <li class="nav-item me-5"><a class="nav-link" href="/cw2/account.php">Logged in as <b><?php echo $_SESSION['user']?></b></a></li>
                 <form method="POST" action="logout.php">
                     <input class="btn btn-outline-danger" type="submit" name="logout" value="LOGOUT" />

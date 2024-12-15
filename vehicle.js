@@ -6,8 +6,7 @@ $(function() {
 
         },
         error: function() {
-            $('#alertText').text("There was an error with the Ajax Call");
-            $("#alert").fadeIn();
+            showAlert("There was an error with the Ajax Call")
         }
     });
 
@@ -23,15 +22,14 @@ $(function() {
             success: function(response) {
                 $('#vehicleList').html(response);  
             },
-            error: function(xhr, status, error) {
+            error: function(error) {
                 console.log("Error: " + error);  
             }
         });
     });
-    
 
     $(document).on('show.bs.modal', "#vehicleEditModal", function(event){
-        // $('.modal-backdrop').remove();
+        $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
         var id = button.data('id')
         var plate = button.data('plate')
@@ -42,26 +40,17 @@ $(function() {
 
         var modal = $(this)
         modal.find(".text-danger").hide();
-        modal.find('.modal-body input[name="idEdit"]').val(id);
-        modal.find('.modal-body input[name="plateEdit"]').val(plate);
-        modal.find('.modal-body input[name="makeEdit"]').val(make);
-        modal.find('.modal-body input[name="modelEdit"]').val(model);
-        modal.find('.modal-body input[name="colourEdit"]').val(colour);
-        modal.find('.modal-body select[name="ownerEdit"]').val(owner);
-
-        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
+        modal.find('input[name="idEdit"]').val(id);
+        modal.find('input[name="plateEdit"]').val(plate);
+        modal.find('input[name="makeEdit"]').val(make);
+        modal.find('input[name="modelEdit"]').val(model);
+        modal.find('input[name="colourEdit"]').val(colour);
+        modal.find('select[name="ownerEdit"]').val(owner);
     });
 
-    // $('#vehicleEditModal').on('hidden.bs.modal', function () {
-
-    //     $(".modal-backdrop").remove(); // Remove lingering backdrops
-    //     $("body").removeClass("modal-open").css("padding-right", ""); // Reset body state
-    // });
-
-    $(document).on('click', '#submit-edit', function () {
-    // $(document).on('submit', 'form[id^="vehicleEditForm"]', function(event){
+    $(document).on('submit', "#vehicleEditForm", function(event){
         event.preventDefault();
-        const form = $("#vehicleEditForm");
+        const form = $(this);
         const idEdit = parseInt(form.find("input[name='idEdit']").val(), 10);
         const plateEdit = form.find("input[name='plateEdit']").val().trim();
         const makeEdit = form.find("input[name='makeEdit']").val().trim();
@@ -70,7 +59,6 @@ $(function() {
         const ownerEdit = form.find("select[name='ownerEdit']").val() 
             ? parseInt(form.find("select[name='ownerEdit']").val(), 10) 
             : null;
-    
    
         let hasError = false;
        
@@ -107,57 +95,30 @@ $(function() {
             ownerEdit
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "vehicleEdit.php",
             type: "POST",
             data: formData,
             success: function (res){
-                // console.log("Raw response:", res); // Log the raw response to inspect it
-                // try {
-                //     const response = JSON.parse(res); // Try parsing the response
-                //     console.log("Parsed response:", response); // Log the parsed response
-                // } catch (e) {
-                //     console.error("Failed to parse JSON:", e); // Catch and log any errors
-                // }
-                const response = JSON.parse(res);
-                if (response.success) {
-                    // $.ajax({
-                    //     url: 'vehicle.php',  
-                    //     type: 'GET',
-                    //     success: function(res) {
-                    //         $('#vehicleList').html(res);  
-                    //     },
-                    //     error: function(error) {
-                    //         console.error('Error reloading data:', error);
-                    //     }
-                    // });
+                if (res.success) {
                     $('#vehicleList').load('vehicle.php');
-                    // $('.modal').modal('hide');
-                    // form.closest('.modal').modal('hide');
-                    // $('body').removeClass('modal-open');
-                    // $('.modal-backdrop').remove();
-                } 
-                $('#alertText').text(response.message);
-                $("#alert").fadeIn();
-                form[0].submit();
-                // $('#vehicleEditModal').modal('hide');
-                
+                } else {
+                    showAlert(res.message)
+                }
+                $('#vehicleEditModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
-                // $('#vehicleEditModal').modal('hide');
+                showAlert("There was an error with the Ajax Call. Please try again later.")
+                $('#vehicleEditModal').modal('hide');
             }
         });
         
     });
 
-    // $('#vehicleEditModal').on('hidden.bs.modal', function () {
-    //     $(".modal-backdrop").remove();
-    //     $("body").removeClass("modal-open").css("padding-right", "");
-    //     // console.log("Closing modal. Backdrop count:", $(".modal-backdrop").length);
-    // });
+    $('#vehicleEditModal').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+    });
 
 
     $(document).on('show.bs.modal', "#vehicleAddModal", function(event){
@@ -167,11 +128,9 @@ $(function() {
         modal.find(".text-danger").hide();
         modal.find('.modal-body input').val("");
         modal.find('.modal-body select').val("");
-        // console.log("Opening modal. Backdrop count:", $(".modal-backdrop").length);
     });
     
-    // $(document).off("submit", "#vehicleAddForm").on("submit", "#vehicleAddForm", function(event){
-    $("#vehicleAddForm").off("submit").on("submit", function (event) {
+    $("#vehicleAddForm").on("submit", function (event) {
         event.preventDefault();
         const form = $(this);
         const plate = form.find("input[name='plate']").val().trim();
@@ -221,73 +180,52 @@ $(function() {
             type: "POST",
             data: formData,
             success: function (res){
-                //  console.log("Raw response:", res); // Log the raw response to inspect it
-                // try {
-                //     const response = JSON.parse(res); // Try parsing the response
-                //     console.log("Parsed response:", response); // Log the parsed response
-                // } catch (e) {
-                //     console.error("Failed to parse JSON:", e); // Catch and log any errors
-                // }
-                try {
-            
-                    const response = JSON.parse(res);
-                    if (response.success) {
-                        // $.ajax({
-                        //     url: 'vehicle.php',  
-                        //     type: 'GET',
-                        //     success: function(res) {
-                        //         $('#vehicleList').html(res);  
-                        //     },
-                        //     error: function(error) {
-                        //         console.error('Error reloading data:', error);
-                        //     }
-                        // });
-                        $('#vehicleList').load('vehicle.php');
-                    } 
-                    $('#alertText').text(response.message);
-                    $("#alert").fadeIn();
-                    $('#vehicleAddModal').modal('hide');
-                } catch (e) {
-                    console.error("Failed to parse JSON:", e, res); // Catch and log any errors
+                if (res.success) {
+                    $('#vehicleList').load('vehicle.php');
+                } else {
+                    showAlert(res.message)
                 }
+                $('#vehicleAddModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.");
                 $('#vehicleAddModal').modal('hide');
             }
         });
     });
 
     $('#vehicleAddModal').on('hidden.bs.modal', function () {
-        // $(this).find("form")[0].reset();
-
         $(".modal-backdrop").remove();
         $("body").removeClass("modal-open").css("padding-right", "");
     });
 
     $(document).on('click', "#vehicleDeleteBtn", function(event){
         var id = $(this).data('id')
+        var plate = $(this).data('plate')
+
         $.ajax({
             url: "vehicleDelete.php",
             type: "POST",
-            data: {id},
-            success: function (data){
-                if(data == 'error'){
-                    $('#alertText').text("There was an issue deleting!");
-                    $("#alert").fadeIn();
-                }else{
-                    //remove containing div
-                    // deleteButton.parent().remove();
+            data: {id, plate},
+            success: function (res){
+                if (res.success) {
                     $('#vehicleList').load('vehicle.php');
+                } else{ 
+                    showAlert(res.message)
                 }
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
             }
-
         });
-        
+    });
+
+    function showAlert(message) {
+        $('#alertText').text(message); 
+        $("#alert").fadeIn();       
+    }
+
+    $('#alert .btn-close').on('click', function () {
+        $("#alert").fadeOut(); 
     });
 })

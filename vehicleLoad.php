@@ -9,10 +9,10 @@ $targetPlate = $_POST["targetPlate"] ?? '';
 if ($targetPlate !== '') {
     $sql = "SELECT Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, Vehicle.Vehicle_make, Vehicle.Vehicle_model, Vehicle.Vehicle_colour, People.People_ID, People.People_Name, People.People_Licence  
     FROM Vehicle LEFT JOIN Ownership ON Vehicle.Vehicle_ID = Ownership.Vehicle_ID LEFT JOIN People ON People.People_ID = Ownership.People_ID 
-    WHERE Vehicle.Vehicle_plate='$targetPlate'";
+    WHERE Vehicle.Vehicle_plate='$targetPlate' ORDER BY Vehicle.Vehicle_ID DESC";
 } else {
     $sql = "SELECT Vehicle.Vehicle_ID, Vehicle.Vehicle_plate, Vehicle.Vehicle_make, Vehicle.Vehicle_model, Vehicle.Vehicle_colour, People.People_ID, People.People_name, People.People_licence  
-    FROM Vehicle LEFT JOIN Ownership ON Vehicle.Vehicle_ID = Ownership.Vehicle_ID LEFT JOIN People ON People.People_ID = Ownership.People_ID";
+    FROM Vehicle LEFT JOIN Ownership ON Vehicle.Vehicle_ID = Ownership.Vehicle_ID LEFT JOIN People ON People.People_ID = Ownership.People_ID ORDER BY Vehicle.Vehicle_ID DESC";
 }
 $result = mysqli_query($conn, $sql);
 $count = mysqli_num_rows($result);
@@ -78,7 +78,7 @@ $count = mysqli_num_rows($result);
                 </div>
             </td>
             <td>
-            <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' style='display: block; margin-bottom: .4rem'>DELETE</a>
+            <a id='vehicleDeleteBtn' class='btn btn-outline-danger' data-id='$vehicleId' data-plate='$vehiclePlate' style='display: block; margin-bottom: .4rem'>DELETE</a>
             <a class='btn btn-outline-dark' data-bs-target='#vehicleEditModal' style='display: block;' data-bs-toggle='modal' data-id='$vehicleId' data-plate='$vehiclePlate' data-make='$vehicleMake' data-model='$vehicleModel' data-colour='$vehicleColour' data-owner='$peopleID'>EDIT</a>
                 ";
                 

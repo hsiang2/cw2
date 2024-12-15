@@ -8,11 +8,12 @@ $targetId = $_POST["targetId"] ?? '';
 
 if ($targetId !== '') {
     $sql = "SELECT Officer.Officer_ID, Officer.Officer_name, Officer.Officer_username, Officer.Officer_password, Officer.Officer_admin
-    FROM Officer WHERE Officer.Officer_ID='$targetId'";
+    FROM Officer WHERE Officer.Officer_ID='$targetId' ORDER BY Officer.Officer_ID";
 } else {
     $sql = "SELECT Officer.Officer_ID, Officer.Officer_name, Officer.Officer_username, Officer.Officer_password, Officer.Officer_admin
-    FROM Officer";
+    FROM Officer ORDER BY Officer.Officer_ID";
 }
+
 $result = mysqli_query($conn, $sql);
 $count = mysqli_num_rows($result);
     if($count > 0) {

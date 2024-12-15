@@ -1,30 +1,42 @@
 <?php
     include('connection.php');
+    session_start();
+    $officerId = $_SESSION["id"];
+
+    header('Content-Type: application/json');
 
     $response = [
-        "success" => true,
-        "message" => "",
+        "success" => false,
+        "message" => "Unknown error",
     ];
-    $sqlCheck = "SELECT COUNT(*) AS count FROM Officer WHERE Officer_ID = '" . $_POST['id'] . "'";
-    $resultCheck = mysqli_query($conn, $sqlCheck);
-    $row = mysqli_fetch_assoc($resultCheck);
-    if ($row['count'] > 0) {
-            $response['success'] = false;
-            $response['message'] = "The officer ID already exists.";
-            echo json_encode($response);
-            exit;
-    }
-    
-    $sqlAdd = "INSERT INTO Officer(Officer_id, Officer_name, Officer_username, Officer_password, Officer_admin) VALUES ('" . $_POST['id'] . "','" . $_POST['name'] ."','" . $_POST['username'] . "','" . $_POST['password'] . "','" . $_POST['admin'] . "');";
-        // send query to the database
-        $resultAdd = mysqli_query($conn, $sqlAdd); 
 
+    try {
+        $sqlCheck = "SELECT COUNT(*) AS count FROM Officer WHERE Officer_ID = '" . $_POST['id'] . "'";
+        $resultCheck = mysqli_query($conn, $sqlCheck);
+        $row = mysqli_fetch_assoc($resultCheck);
+        if ($row['count'] > 0) {
+            throw new Exception("The officer ID already exists.");
+        }
+        
+        $sqlAdd = "INSERT INTO Officer(Officer_id, Officer_name, Officer_username, Officer_password, Officer_admin) VALUES ('" . $_POST['id'] . "','" . $_POST['name'] ."','" . $_POST['username'] . "','" . $_POST['password'] . "','" . $_POST['admin'] . "');";
+        $resultAdd = mysqli_query($conn, $sqlAdd); 
+    
         if(!$resultAdd) {
-            $response['success'] = false; 
-            $response['message'] = "Error adding officer"; 
-            echo json_encode($response); 
-            exit;
-        }  
+            throw new Exception("Error adding officer");
+        }
+
+        $sqlAudit = "INSERT INTO Audit(Officer_ID, Audit_table, Audit_action, Audit_record) VALUES ('$officerId', 'Officer', 'Add','" . $_POST['id'] . "');";
+        $resultAudit = mysqli_query($conn, $sqlAudit); 
+
+        if(!$resultAudit) {
+            throw new Exception("Error adding audit.");
+        }
+
+        $response['success'] = true;  
         $response['message'] = "Officer added successfully";
-        echo json_encode($response); 
+    } catch (Exception $e) {
+        $response['message'] = $e->getMessage();
+    }
+
+    echo json_encode($response); 
 ?>

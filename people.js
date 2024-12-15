@@ -6,14 +6,12 @@ $(function() {
 
         },
         error: function() {
-            $('#alertText').text("There was an error with the Ajax Call");
-            $("#alert").fadeIn();
+            showAlert("There was an error with the Ajax Call")
         }
     });
 
     $("#peopleSearchForm").submit(function(event) {
         event.preventDefault();  
-    
         var formData = $(this).serializeArray();
     
         $.ajax({
@@ -30,7 +28,9 @@ $(function() {
     });
 
     $(document).on('show.bs.modal', "#peopleEditModal", function(event){
+        $('.modal-backdrop').remove();
         var button = $(event.relatedTarget) 
+
         var id = button.data('id')
         var name = button.data('name')
         var address = button.data('address')
@@ -39,22 +39,21 @@ $(function() {
 
         var modal = $(this)
         modal.find(".text-danger").hide();
-        modal.find('.modal-body input[name="idEdit"]').val(id);
-        modal.find('.modal-body input[name="nameEdit"]').val(name);
-        modal.find('.modal-body input[name="addressEdit"]').val(address);
-        modal.find('.modal-body input[name="dobEdit"]').val(dob);
-        modal.find('.modal-body input[name="licenceEdit"]').val(licence);
+        modal.find('input[name="idEdit"]').val(id);
+        modal.find('input[name="nameEdit"]').val(name);
+        modal.find('input[name="addressEdit"]').val(address);
+        modal.find('input[name="dobEdit"]').val(dob);
+        modal.find('input[name="licenceEdit"]').val(licence);
     });
 
-    $(document).on('click', '#submit-people-edit', function () {
+     $(document).on("submit", "#peopleEditForm", function(event){
         event.preventDefault();
-        const form = $("#peopleEditForm");
+        const form = $(this);
         const idEdit = parseInt(form.find("input[name='idEdit']").val(), 10);
         const nameEdit = form.find("input[name='nameEdit']").val().trim();
         const addressEdit = form.find("input[name='addressEdit']").val().trim();
         const dobEdit = form.find("input[name='dobEdit']").val();
         const licenceEdit = form.find("input[name='licenceEdit']").val().trim();
-    
    
         let hasError = false;
        
@@ -90,44 +89,47 @@ $(function() {
             licenceEdit,
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "peopleEdit.php",
             type: "POST",
             data: formData,
             success: function (res){
-                const response = JSON.parse(res);
-                if (response.success) {
+                if (res.success) {
                     $('#peopleList').load('people.php');
-                } 
-                $('#alertText').text(response.message);
-                $("#alert").fadeIn();
-                form[0].submit();
+                } else {
+                    showAlert(res.message)
+                }
+                $('#peopleEditModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
+                $('#peopleEditModal').modal('hide');
             }
         });
     });
 
-    $(document).on('show.bs.modal', "#peopleAddModal", function(event){
+    $('#peopleEditModal').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+    });
 
+    $(document).on('show.bs.modal', "#peopleAddModal", function(){
+        $('.modal-backdrop').remove();
+        
         var modal = $(this)
         modal.find(".text-danger").hide();
         modal.find('.modal-body input').val("");
     });
 
-    $(document).on('click', '#submit-people-add', function () {
+    $("#peopleAddForm").on("submit", function (event) {
         event.preventDefault();
-        const form = $("#peopleAddForm");
+        const form = $(this);
         const id = parseInt(form.find("input[name='id']").val(), 10);
         const name = form.find("input[name='name']").val().trim();
         const address = form.find("input[name='address']").val().trim();
         const dob = form.find("input[name='dob']").val();
         const licence = form.find("input[name='licence']").val().trim();
     
-   
         let hasError = false;
        
         if (!name) {
@@ -162,47 +164,56 @@ $(function() {
             licence,
         };
 
-        // var formData = $(this).serializeArray();
         $.ajax({
             url: "peopleAdd.php",
             type: "POST",
             data: formData,
             success: function (res){
-                const response = JSON.parse(res);
-                if (response.success) {
+                if (res.success) {
                     $('#peopleList').load('people.php');
-                } 
-                // $('#alertText').text(response.message);
-                // $("#alert").fadeIn();
-                form[0].submit();
+                }  else {
+                    showAlert(res.message);
+                }
+                $('#peopleAddModal').modal('hide');
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
-                form[0].submit();
+                showAlert("There was an error with the Ajax Call. Please try again later.");
+                $('#peopleAddModal').modal('hide');
             }
         });
     });
 
+    $('#peopleAddForm').on('hidden.bs.modal', function () {
+        $(".modal-backdrop").remove();
+        $("body").removeClass("modal-open").css("padding-right", "");
+    });
+
     $(document).on('click', "#peopleDeleteBtn", function(event){
         var id = $(this).data('id')
+        var licence = $(this).data('licence')
         $.ajax({
             url: "peopleDelete.php",
             type: "POST",
-            data: {id},
-            success: function (data){
-                if(data == 'error'){
-                    $('#alertText').text("There was an issue deleting!");
-                    $("#alert").fadeIn();
-                }else{
+            data: {id, licence},
+            success: function (res){
+                if (res.success) {
                     $('#peopleList').load('people.php');
+                } else {
+                    showAlert(res.message)
                 }
             },
             error: function(){
-                $('#alertText').text("There was an error with the Ajax Call. Please try again later.");
-                $("#alert").fadeIn();
+                showAlert("There was an error with the Ajax Call. Please try again later.")
             }
         });
     });
-   
+
+    function showAlert(message) {
+        $('#alertText').text(message); 
+        $("#alert").fadeIn();       
+    }
+
+    $('#alert .btn-close').on('click', function () {
+        $("#alert").fadeOut(); 
+    });
 })

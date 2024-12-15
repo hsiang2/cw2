@@ -1,49 +1,46 @@
 <?php
     include("connection.php");
+    session_start();
+    $officerId = $_SESSION["id"];
+
+    header('Content-Type: application/json');
 
     $response = [
-        "success" => true,
-        "message" => "",
+        "success" => false,
+        "message" => "Unknown error",
     ];
 
-    // $vehicleID = (int)$_POST['idEdit'];
-
-    // if (isset($_POST['plateEdit']) && $_POST['plateEdit']!="" 
-    // && isset($_POST['makeEdit']) && $_POST['makeEdit']!="" 
-    // && isset($_POST['modelEdit']) && $_POST['modelEdit']!=""
-    // && isset($_POST['colourEdit']) && $_POST['colourEdit']!=""
-    // ) 
-    // {     
+    try {
         $sqlEdit = "UPDATE Vehicle SET Vehicle_plate='" . $_POST['plateEdit'] . "', Vehicle_make='" . $_POST['makeEdit'] . "', Vehicle_model='" . $_POST['modelEdit'] . "', Vehicle_colour='" . $_POST['colourEdit'] . "' WHERE Vehicle_ID=" . $_POST['idEdit'];
 
         if (!mysqli_query($conn, $sqlEdit)) {
-            $response['success'] = false;  // If vehicle update fails, set success to false
-            $response['message'] = "Error updating vehicle details";  // Immediate failure message
-            echo json_encode($response); 
-            exit;
+            throw new Exception("Error updating vehicle details");
         } 
-    // }
-
-    // if (isset($_POST['ownerEdit']) && isset($_POST['ownerEdit']) != null) {
-    if ($_POST['ownerEdit']) {
 
         $sqlDeleteOwner = "DELETE FROM Ownership WHERE Vehicle_ID=" . $_POST['idEdit'];
         if (!mysqli_query($conn, $sqlDeleteOwner)) {
-            $response['success'] = false;
-            $response['message'] = "Error deleting previous owner";
-            echo json_encode($response);
-            exit;
+            throw new Exception("Error deleting previous owner");
         }
- 
-        $sqlAddOwner = "INSERT INTO Ownership(Vehicle_ID, People_ID) VALUES ('" . $_POST['idEdit'] . "','" . $_POST['ownerEdit'] . "');";
-        if (!mysqli_query($conn, $sqlAddOwner)) {
-            $response['success'] = false;
-            $response['message'] = "Error adding ownership details";
-            echo json_encode($response);
-            exit;
+    
+        if ($_POST['ownerEdit']) {
+            $sqlAddOwner = "INSERT INTO Ownership(Vehicle_ID, People_ID) VALUES ('" . $_POST['idEdit'] . "','" . $_POST['ownerEdit'] . "');";
+            if (!mysqli_query($conn, $sqlAddOwner)) {
+                throw new Exception("Error adding ownership");
+            }
         }
+
+        $sqlAudit = "INSERT INTO Audit(Officer_ID, Audit_table, Audit_action, Audit_record) VALUES ('$officerId', 'Vehicle', 'Edit','" . $_POST['plateEdit'] . "');";
+        $resultAudit = mysqli_query($conn, $sqlAudit); 
+
+        if(!$resultAudit) {
+            throw new Exception("Error adding audit.");
+        }
+
+        $response['success'] = true;
+        $response['message'] = "Vehicle and Ownership updated successfully";
+    } catch (Exception $e) {
+        $response['message'] = $e->getMessage();
     }
 
-    $response['message'] = "Vehicle and Ownership updated successfully";
     echo json_encode($response); 
 ?>
