@@ -71,11 +71,7 @@
 <?php
     $targetOfficer = $_POST["officer"] ?? '';
     $targetTable = $_POST["table"] ?? '';
-
     $sql = "SELECT Officer_ID, Audit_action, Audit_record, Audit_table, Audit_time FROM Audit WHERE (Officer_ID='$targetOfficer' OR '$targetOfficer' = '') AND (Audit_table='$targetTable' OR '$targetTable'='') ORDER BY Audit_ID DESC";
-
-        
-    // $sql = "SELECT * FROM People WHERE People_name LIKE '%$targetName%' OR People_licence LIKE '%$targetLicence%'";
     $result = mysqli_query($conn, $sql);
     $count = mysqli_num_rows($result);
     if($count > 0) {
@@ -127,8 +123,6 @@
             </div>
         </footer>
         <!-- Bootstrap 5 JS via CDN -->
-        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"> </script>
-        <!-- <script src="audit.js"></script>   -->
     </body>
 </html>
